@@ -3,6 +3,17 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.4.0] - 2026-11-14
+
+### Agregado
+- **Módulo «Respaldo»** (pedido por Esteban tras probar la app): exportar TODOS los datos (gastos, categorías y fijos) a **un solo archivo** e importarlo en otro equipo, en los dos sentidos (Windows → Android y Android → Windows), sin volver a ingresar nada a mano.
+- Como eligió Esteban, el archivo es **simple, sin clave**: se pasa por WhatsApp, cable, correo o Drive como cualquier archivo.
+- Al importar, la app avisa cuántos datos trae el archivo y pide confirmación, porque **reemplaza todo** lo que haya en el equipo destino (es para migrar, no para mezclar dos equipos).
+- Si el archivo no es un respaldo válido, la app lo rechaza **sin tocar ningún dato** (revisión completa antes de reemplazar, con prueba automática).
+
+### Notas
+- La sincronización automática en la nube (sin archivos) sigue en su fase posterior; este módulo cubre la migración manual entre equipos.
+
 ## [0.3.0] - 2026-11-14
 
 ### Agregado

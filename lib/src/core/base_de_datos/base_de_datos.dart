@@ -233,4 +233,168 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   Future<int> eliminarFijo(int id) =>
       (delete(fijos)..where((f) => f.id.equals(id))).go();
+
+  // ---------------- Respaldo (exportar / importar) ----------------
+
+  /// Todos los datos del hogar en un mapa listo para guardar como JSON
+  /// en un solo archivo (módulo «Respaldo», v0.4.0). Con ese archivo la
+  /// persona pasa su app de un equipo a otro sin reingresar nada.
+  Future<Map<String, Object?>> exportarDatos() async {
+    final listaCategorias = await select(categorias).get();
+    final listaGastos = await select(gastos).get();
+    final listaFijos = await select(fijos).get();
+    return {
+      'aplicacion': 'finanzas-hogar',
+      'formato': 1,
+      'categorias': [
+        for (final c in listaCategorias)
+          {
+            'id': c.id,
+            'nombre': c.nombre,
+            'colorValor': c.colorValor,
+            'icono': c.icono,
+            'oculta': c.oculta,
+            'tipoFactura': c.tipoFactura,
+            'orden': c.orden,
+          },
+      ],
+      'gastos': [
+        for (final g in listaGastos)
+          {
+            'id': g.id,
+            'montoMenor': g.montoMenor,
+            'moneda': g.moneda,
+            'tasaBase': g.tasaBase,
+            'montoBaseMenor': g.montoBaseMenor,
+            'fecha': g.fecha.toIso8601String(),
+            'categoriaId': g.categoriaId,
+            'descripcion': g.descripcion,
+            'hechoPor': g.hechoPor,
+            'metodoPago': g.metodoPago,
+            'fotoRuta': g.fotoRuta,
+            'creadoEn': g.creadoEn.toIso8601String(),
+            'actualizadoEn': g.actualizadoEn.toIso8601String(),
+          },
+      ],
+      'fijos': [
+        for (final f in listaFijos)
+          {
+            'id': f.id,
+            'tipo': f.tipo,
+            'nombre': f.nombre,
+            'descripcion': f.descripcion,
+            'montoMenor': f.montoMenor,
+            'moneda': f.moneda,
+            'diaDelMes': f.diaDelMes,
+            'creadoEn': f.creadoEn.toIso8601String(),
+            'actualizadoEn': f.actualizadoEn.toIso8601String(),
+          },
+      ],
+    };
+  }
+
+  /// Reemplaza TODOS los datos actuales por los del [datos] (un mapa
+  /// como el de [exportarDatos]). Primero revisa el archivo completo:
+  /// si algo no cuadra, lanza [FormatException] y no toca nada.
+  Future<void> importarDatos(Map<String, Object?> datos) async {
+    if (datos['aplicacion'] != 'finanzas-hogar' || datos['formato'] != 1) {
+      throw const FormatException('No es un archivo de respaldo válido.');
+    }
+    final crudasCategorias = datos['categorias'];
+    final crudosGastos = datos['gastos'];
+    final crudosFijos = datos['fijos'];
+    if (crudasCategorias is! List ||
+        crudosGastos is! List ||
+        crudosFijos is! List) {
+      throw const FormatException('Al archivo le faltan datos.');
+    }
+
+    Map<String, Object?> fila(Object? valor) {
+      if (valor is Map) {
+        return valor.map((k, v) => MapEntry(k.toString(), v));
+      }
+      throw const FormatException('Una fila del archivo está dañada.');
+    }
+
+    int entero(Map<String, Object?> f, String clave) {
+      final v = f[clave];
+      if (v is num) return v.toInt();
+      throw FormatException('Falta el número «$clave» en el archivo.');
+    }
+
+    String texto(Map<String, Object?> f, String clave) {
+      final v = f[clave];
+      if (v is String) return v;
+      throw FormatException('Falta el texto «$clave» en el archivo.');
+    }
+
+    DateTime fecha(Map<String, Object?> f, String clave) =>
+        DateTime.parse(texto(f, clave));
+
+    final nuevasCategorias = <CategoriasCompanion>[
+      for (final cruda in crudasCategorias)
+        () {
+          final f = fila(cruda);
+          return CategoriasCompanion(
+            id: Value(entero(f, 'id')),
+            nombre: Value(texto(f, 'nombre')),
+            colorValor: Value(entero(f, 'colorValor')),
+            icono: Value(f['icono']?.toString() ?? 'otros'),
+            oculta: Value(f['oculta'] == true),
+            tipoFactura: Value(f['tipoFactura']?.toString()),
+            orden: Value(f['orden'] is num ? (f['orden'] as num).toInt() : 0),
+          );
+        }(),
+    ];
+    final nuevosGastos = <GastosCompanion>[
+      for (final crudo in crudosGastos)
+        () {
+          final f = fila(crudo);
+          return GastosCompanion(
+            id: Value(entero(f, 'id')),
+            montoMenor: Value(entero(f, 'montoMenor')),
+            moneda: Value(f['moneda']?.toString() ?? 'COP'),
+            tasaBase:
+                Value(f['tasaBase'] is num ? (f['tasaBase'] as num).toDouble() : 1.0),
+            montoBaseMenor: Value(entero(f, 'montoBaseMenor')),
+            fecha: Value(fecha(f, 'fecha')),
+            categoriaId: Value(entero(f, 'categoriaId')),
+            descripcion: Value(f['descripcion']?.toString() ?? ''),
+            hechoPor: Value(f['hechoPor']?.toString() ?? 'Yo'),
+            metodoPago: Value(f['metodoPago']?.toString() ?? 'efectivo'),
+            fotoRuta: Value(f['fotoRuta']?.toString()),
+            creadoEn: Value(fecha(f, 'creadoEn')),
+            actualizadoEn: Value(fecha(f, 'actualizadoEn')),
+          );
+        }(),
+    ];
+    final nuevosFijos = <FijosCompanion>[
+      for (final crudo in crudosFijos)
+        () {
+          final f = fila(crudo);
+          return FijosCompanion(
+            id: Value(entero(f, 'id')),
+            tipo: Value(texto(f, 'tipo')),
+            nombre: Value(texto(f, 'nombre')),
+            descripcion: Value(f['descripcion']?.toString() ?? ''),
+            montoMenor: Value(entero(f, 'montoMenor')),
+            moneda: Value(f['moneda']?.toString() ?? 'COP'),
+            diaDelMes: Value(entero(f, 'diaDelMes')),
+            creadoEn: Value(fecha(f, 'creadoEn')),
+            actualizadoEn: Value(fecha(f, 'actualizadoEn')),
+          );
+        }(),
+    ];
+
+    await transaction(() async {
+      await delete(gastos).go();
+      await delete(fijos).go();
+      await delete(categorias).go();
+      await batch((b) {
+        b.insertAll(categorias, nuevasCategorias);
+        b.insertAll(gastos, nuevosGastos);
+        b.insertAll(fijos, nuevosFijos);
+      });
+    });
+  }
 }

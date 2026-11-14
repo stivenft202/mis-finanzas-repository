@@ -453,6 +453,96 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Valor'**
   String get valor;
+
+  /// No description provided for @respaldo.
+  ///
+  /// In es, this message translates to:
+  /// **'Respaldo'**
+  String get respaldo;
+
+  /// No description provided for @respaldoIntro.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasa todos tus datos de un equipo a otro en un solo archivo: expórtalos aquí, lleva el archivo al otro equipo (por WhatsApp, cable o Drive) e impórtalo allá. No tendrás que volver a ingresar nada.'**
+  String get respaldoIntro;
+
+  /// No description provided for @exportarMisDatos.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar mis datos'**
+  String get exportarMisDatos;
+
+  /// No description provided for @exportarAyuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Guarda un archivo con todos tus gastos, categorías y fijos.'**
+  String get exportarAyuda;
+
+  /// No description provided for @importarDatos.
+  ///
+  /// In es, this message translates to:
+  /// **'Importar datos'**
+  String get importarDatos;
+
+  /// No description provided for @importarAyuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige un archivo de respaldo y este equipo queda con todos esos datos.'**
+  String get importarAyuda;
+
+  /// No description provided for @guardarRespaldoTitulo.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar archivo de respaldo'**
+  String get guardarRespaldoTitulo;
+
+  /// No description provided for @elegirRespaldoTitulo.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir archivo de respaldo'**
+  String get elegirRespaldoTitulo;
+
+  /// No description provided for @exportarListo.
+  ///
+  /// In es, this message translates to:
+  /// **'Respaldo guardado. Ahora lleva el archivo al otro equipo e impórtalo allá.'**
+  String get exportarListo;
+
+  /// No description provided for @importarListo.
+  ///
+  /// In es, this message translates to:
+  /// **'Datos importados. Este equipo ya tiene todo lo del archivo.'**
+  String get importarListo;
+
+  /// No description provided for @importarAvisoTitulo.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Reemplazar todos los datos?'**
+  String get importarAvisoTitulo;
+
+  /// No description provided for @importarAvisoTexto.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo trae {gastos} gastos, {categorias} categorías y {fijos} fijos. Al importar se BORRA todo lo que hay ahora en este equipo y queda lo del archivo. Esto no se puede deshacer.'**
+  String importarAvisoTexto(int gastos, int categorias, int fijos);
+
+  /// No description provided for @siImportar.
+  ///
+  /// In es, this message translates to:
+  /// **'Sí, importar'**
+  String get siImportar;
+
+  /// No description provided for @archivoNoValido.
+  ///
+  /// In es, this message translates to:
+  /// **'Ese archivo no es un respaldo válido de esta app.'**
+  String get archivoNoValido;
+
+  /// No description provided for @errorRespaldo.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo guardar el respaldo. Inténtalo de nuevo.'**
+  String get errorRespaldo;
 }
 
 class _AppLocalizationsDelegate

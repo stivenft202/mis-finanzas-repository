@@ -13,6 +13,7 @@ import '../../core/utilidades/fechas.dart';
 import '../categorias/iconos_categoria.dart';
 import '../categorias/pantalla_categorias.dart';
 import '../fijos/pantalla_fijos.dart';
+import '../respaldo/pantalla_respaldo.dart';
 import 'formulario_gasto.dart';
 import 'pantalla_gastos.dart';
 
@@ -106,6 +107,16 @@ class PantallaInicio extends ConsumerWidget {
             label: Text(textos.fijosDelMes),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const PantallaFijos()),
+            ),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(56)),
+            icon: const Icon(Icons.backup),
+            label: Text(textos.respaldo),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PantallaRespaldo()),
             ),
           ),
           const SizedBox(height: 24),

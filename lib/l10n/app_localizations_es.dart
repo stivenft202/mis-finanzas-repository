@@ -196,4 +196,58 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get valor => 'Valor';
+
+  @override
+  String get respaldo => 'Respaldo';
+
+  @override
+  String get respaldoIntro =>
+      'Pasa todos tus datos de un equipo a otro en un solo archivo: expórtalos aquí, lleva el archivo al otro equipo (por WhatsApp, cable o Drive) e impórtalo allá. No tendrás que volver a ingresar nada.';
+
+  @override
+  String get exportarMisDatos => 'Exportar mis datos';
+
+  @override
+  String get exportarAyuda =>
+      'Guarda un archivo con todos tus gastos, categorías y fijos.';
+
+  @override
+  String get importarDatos => 'Importar datos';
+
+  @override
+  String get importarAyuda =>
+      'Elige un archivo de respaldo y este equipo queda con todos esos datos.';
+
+  @override
+  String get guardarRespaldoTitulo => 'Guardar archivo de respaldo';
+
+  @override
+  String get elegirRespaldoTitulo => 'Elegir archivo de respaldo';
+
+  @override
+  String get exportarListo =>
+      'Respaldo guardado. Ahora lleva el archivo al otro equipo e impórtalo allá.';
+
+  @override
+  String get importarListo =>
+      'Datos importados. Este equipo ya tiene todo lo del archivo.';
+
+  @override
+  String get importarAvisoTitulo => '¿Reemplazar todos los datos?';
+
+  @override
+  String importarAvisoTexto(int gastos, int categorias, int fijos) {
+    return 'El archivo trae $gastos gastos, $categorias categorías y $fijos fijos. Al importar se BORRA todo lo que hay ahora en este equipo y queda lo del archivo. Esto no se puede deshacer.';
+  }
+
+  @override
+  String get siImportar => 'Sí, importar';
+
+  @override
+  String get archivoNoValido =>
+      'Ese archivo no es un respaldo válido de esta app.';
+
+  @override
+  String get errorRespaldo =>
+      'No se pudo guardar el respaldo. Inténtalo de nuevo.';
 }
