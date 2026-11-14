@@ -12,6 +12,8 @@ import '../../core/providers.dart';
 import '../../core/utilidades/fechas.dart';
 import '../categorias/iconos_categoria.dart';
 import '../categorias/pantalla_categorias.dart';
+import '../actualizaciones/pantalla_actualizacion.dart';
+import '../actualizaciones/servicio_actualizacion.dart';
 import '../fijos/pantalla_fijos.dart';
 import '../respaldo/pantalla_respaldo.dart';
 import 'formulario_gasto.dart';
@@ -27,12 +29,60 @@ class PantallaInicio extends ConsumerWidget {
     final total = ref.watch(totalDelMesProvider);
     final gastos = ref.watch(gastosDelMesProvider);
     final categorias = ref.watch(categoriasTodasProvider).value ?? const [];
+    final actualizacion = ref.watch(actualizacionDisponibleProvider).value;
 
     return Scaffold(
-      appBar: AppBar(title: Text(textos.tituloApp)),
+      appBar: AppBar(
+        title: Text(textos.tituloApp),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.system_update),
+            tooltip: textos.actualizacion,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PantallaActualizacion()),
+            ),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (actualizacion != null) ...[
+            Card(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.system_update,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        '${textos.hayActualizacionCorta}: ${actualizacion.version}',
+                        style: TextStyle(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    FilledButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const PantallaActualizacion(),
+                        ),
+                      ),
+                      child: Text(textos.actualizar),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
           Card(
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
             child: Padding(

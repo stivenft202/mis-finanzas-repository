@@ -66,15 +66,16 @@ Cada fase se entrega, se prueba y espera la aprobación de Esteban («listo») a
 - [x] **Fase 1** — Base de datos local, categorías, gastos manuales e inicio · `v0.2.0`
 - [x] **Fase 2** — Módulo «Fijos del mes»: gastos e ingresos fijos en tablas con totales y utilidad/deuda en colores (pedido directo de Esteban; adelanta parte de las fases 4 y 5 originales) · `v0.3.0`
 - [x] **Fase 3** — Módulo «Respaldo»: exportar e importar TODOS los datos en un solo archivo, para migrar entre Windows y Android sin reingresar nada (pedido directo de Esteban; archivo simple, sin clave) · `v0.4.0`
-- [ ] **Fase 4** — Usuarios, roles, PIN y seguridad · `v0.5.0`
-- [ ] **Fase 5** — Recurrentes, variables, recordatorios y notificaciones · `v0.6.0`
-- [ ] **Fase 6** — Presupuestos, ingresos, metas y multimoneda · `v0.7.0`
-- [ ] **Fase 7** — Registro por voz con confirmación · `v0.8.0`
-- [ ] **Fase 8** — Fotos de facturas y OCR · `v0.9.0`
-- [ ] **Fase 9** — Búsqueda de precios por internet · `v0.10.0`
-- [ ] **Fase 10** — Sincronización en la nube y copias de seguridad · `v0.11.0`
-- [ ] **Fase 11** — Exportación a Excel/PDF y modo oscuro · `v0.12.0`
-- [ ] **Fase 12** — Actualizaciones desde GitHub Releases y empaquetado final · `v1.0.0`
+- [x] **Fase 4** — Actualización desde dentro de la app: la app revisa sola si hay versión nueva en GitHub, la descarga por dentro y la instala, sin descargar el instalador a mano (pedido directo de Esteban; era la última fase del plan y se adelantó) · `v0.5.0`
+- [ ] **Fase 5** — Usuarios, roles, PIN y seguridad · `v0.6.0`
+- [ ] **Fase 6** — Recurrentes, variables, recordatorios y notificaciones · `v0.7.0`
+- [ ] **Fase 7** — Presupuestos, ingresos, metas y multimoneda · `v0.8.0`
+- [ ] **Fase 8** — Registro por voz con confirmación · `v0.9.0`
+- [ ] **Fase 9** — Fotos de facturas y OCR · `v0.10.0`
+- [ ] **Fase 10** — Búsqueda de precios por internet · `v0.11.0`
+- [ ] **Fase 11** — Sincronización en la nube y copias de seguridad · `v0.12.0`
+- [ ] **Fase 12** — Exportación a Excel/PDF y modo oscuro · `v0.13.0`
+- [ ] **Fase 13** — Empaquetado final · `v1.0.0`
 
 ## Versionado
 

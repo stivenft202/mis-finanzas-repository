@@ -543,6 +543,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No se pudo guardar el respaldo. Inténtalo de nuevo.'**
   String get errorRespaldo;
+
+  /// No description provided for @actualizacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualización'**
+  String get actualizacion;
+
+  /// No description provided for @versionActual.
+  ///
+  /// In es, this message translates to:
+  /// **'Versión actual: {version}'**
+  String versionActual(String version);
+
+  /// No description provided for @buscarActualizacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar actualización'**
+  String get buscarActualizacion;
+
+  /// No description provided for @buscandoActualizacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscando…'**
+  String get buscandoActualizacion;
+
+  /// No description provided for @yaTienesLaUltima.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya tienes la última versión. No hay nada que actualizar.'**
+  String get yaTienesLaUltima;
+
+  /// No description provided for @hayVersionNueva.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una versión nueva: {version}'**
+  String hayVersionNueva(String version);
+
+  /// No description provided for @actualizarAhora.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar ahora'**
+  String get actualizarAhora;
+
+  /// No description provided for @descargandoActualizacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargando la actualización…'**
+  String get descargandoActualizacion;
+
+  /// No description provided for @errorAlBuscarActualizacion.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo buscar la actualización. Revisa tu conexión a internet e inténtalo de nuevo.'**
+  String get errorAlBuscarActualizacion;
+
+  /// No description provided for @errorAlActualizar.
+  ///
+  /// In es, this message translates to:
+  /// **'Algo salió mal al actualizar. Inténtalo de nuevo.'**
+  String get errorAlActualizar;
+
+  /// No description provided for @instaladorAbierto.
+  ///
+  /// In es, this message translates to:
+  /// **'Se abrió el instalador: toca «Instalar» para terminar de actualizar.'**
+  String get instaladorAbierto;
+
+  /// No description provided for @actualizarAvisoWindows.
+  ///
+  /// In es, this message translates to:
+  /// **'La app se va a cerrar un momento, se actualiza sola y se vuelve a abrir ya con la versión nueva. Tus datos no se tocan.'**
+  String get actualizarAvisoWindows;
+
+  /// No description provided for @hayActualizacionCorta.
+  ///
+  /// In es, this message translates to:
+  /// **'Hay una versión nueva'**
+  String get hayActualizacionCorta;
+
+  /// No description provided for @actualizar.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get actualizar;
 }
 
 class _AppLocalizationsDelegate

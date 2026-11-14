@@ -3,6 +3,20 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.5.0] - 2026-11-14
+
+### Agregado
+- **Actualización desde dentro de la app** (pedido por Esteban: no quiere descargar el instalador en cada versión; era la última fase del plan y se adelantó):
+  - Al abrirse, la app revisa sola en GitHub si hay una versión más nueva; si la hay, muestra un aviso en el inicio y un botón en la barra superior.
+  - La pantalla «Actualización» muestra la versión instalada, permite buscar a mano y, con el botón **Actualizar ahora**, descarga la versión nueva por dentro (con progreso) y la instala.
+  - En **Android** abre el instalador del sistema con el APK descargado (el toque final en «Instalar» lo exige Android; la primera vez pedirá el permiso de instalación, una sola vez).
+  - En **Windows** descarga el paquete, se cierra un momento, se reemplaza sola con un ayudante y se vuelve a abrir ya actualizada.
+  - Los datos nunca se tocan al actualizar: solo cambia el programa.
+- Permisos de Android nuevos: internet (para revisar y descargar) y solicitar instalación de paquetes.
+
+### Notas
+- Esta versión se instala a mano **por última vez**: las anteriores no traen el botón de actualización. De aquí en adelante, las versiones llegan desde la propia app.
+
 ## [0.4.0] - 2026-11-14
 
 ### Agregado

@@ -250,4 +250,55 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get errorRespaldo =>
       'No se pudo guardar el respaldo. Inténtalo de nuevo.';
+
+  @override
+  String get actualizacion => 'Actualización';
+
+  @override
+  String versionActual(String version) {
+    return 'Versión actual: $version';
+  }
+
+  @override
+  String get buscarActualizacion => 'Buscar actualización';
+
+  @override
+  String get buscandoActualizacion => 'Buscando…';
+
+  @override
+  String get yaTienesLaUltima =>
+      'Ya tienes la última versión. No hay nada que actualizar.';
+
+  @override
+  String hayVersionNueva(String version) {
+    return 'Hay una versión nueva: $version';
+  }
+
+  @override
+  String get actualizarAhora => 'Actualizar ahora';
+
+  @override
+  String get descargandoActualizacion => 'Descargando la actualización…';
+
+  @override
+  String get errorAlBuscarActualizacion =>
+      'No se pudo buscar la actualización. Revisa tu conexión a internet e inténtalo de nuevo.';
+
+  @override
+  String get errorAlActualizar =>
+      'Algo salió mal al actualizar. Inténtalo de nuevo.';
+
+  @override
+  String get instaladorAbierto =>
+      'Se abrió el instalador: toca «Instalar» para terminar de actualizar.';
+
+  @override
+  String get actualizarAvisoWindows =>
+      'La app se va a cerrar un momento, se actualiza sola y se vuelve a abrir ya con la versión nueva. Tus datos no se tocan.';
+
+  @override
+  String get hayActualizacionCorta => 'Hay una versión nueva';
+
+  @override
+  String get actualizar => 'Actualizar';
 }
