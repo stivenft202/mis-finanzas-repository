@@ -36,7 +36,7 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
       final datos = await base.exportarDatos();
       final contenido = const JsonEncoder.withIndent('  ').convert(datos);
       final bytes = Uint8List.fromList(utf8.encode(contenido));
-      final ruta = await FilePicker.saveFile(
+      final ruta = await FilePicker.platform.saveFile(
         dialogTitle: textos.guardarRespaldoTitulo,
         fileName: 'respaldo-finanzas-hogar.json',
         bytes: bytes,
@@ -66,7 +66,7 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
 
   Future<void> _importar() async {
     final textos = context.textos;
-    final elegido = await FilePicker.pickFiles(
+    final elegido = await FilePicker.platform.pickFiles(
       dialogTitle: textos.elegirRespaldoTitulo,
       type: FileType.custom,
       allowedExtensions: ['json'],

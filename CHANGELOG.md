@@ -3,6 +3,11 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.5.1] - 2026-11-14
+
+### Corregido
+- La compilación de Android falló en GitHub con el selector de archivos nuevo (file_picker 11, agregado para el módulo Respaldo): se cambió por la línea 8 del mismo componente, de eficacia probada, y la app lo usa igual por dentro. Sin cambios visibles para la persona: trae todo lo de la 0.4.0 y la 0.5.0.
+
 ## [0.5.0] - 2026-11-14
 
 ### Agregado
