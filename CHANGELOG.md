@@ -3,6 +3,11 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.5.2] - 2026-11-14
+
+### Corregido
+- Causa raíz encontrada gracias al registro de error: el componente de archivos compilaba contra una versión vieja de Android (34) y otro componente exige la 36. Se usa la línea 10 del selector de archivos, que sí compila contra la versión actual. Trae todo lo de la 0.4.0 y la 0.5.0.
+
 ## [0.5.1] - 2026-11-14
 
 ### Corregido

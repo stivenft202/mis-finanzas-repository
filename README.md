@@ -66,7 +66,7 @@ Cada fase se entrega, se prueba y espera la aprobación de Esteban («listo») a
 - [x] **Fase 1** — Base de datos local, categorías, gastos manuales e inicio · `v0.2.0`
 - [x] **Fase 2** — Módulo «Fijos del mes»: gastos e ingresos fijos en tablas con totales y utilidad/deuda en colores (pedido directo de Esteban; adelanta parte de las fases 4 y 5 originales) · `v0.3.0`
 - [x] **Fase 3** — Módulo «Respaldo»: exportar e importar TODOS los datos en un solo archivo, para migrar entre Windows y Android sin reingresar nada (pedido directo de Esteban; archivo simple, sin clave) · `v0.4.0`
-- [x] **Fase 4** — Actualización desde dentro de la app: la app revisa sola si hay versión nueva en GitHub, la descarga por dentro y la instala, sin descargar el instalador a mano (pedido directo de Esteban; era la última fase del plan y se adelantó) · `v0.5.1`
+- [x] **Fase 4** — Actualización desde dentro de la app: la app revisa sola si hay versión nueva en GitHub, la descarga por dentro y la instala, sin descargar el instalador a mano (pedido directo de Esteban; era la última fase del plan y se adelantó) · `v0.5.2`
 - [ ] **Fase 5** — Usuarios, roles, PIN y seguridad · `v0.6.0`
 - [ ] **Fase 6** — Recurrentes, variables, recordatorios y notificaciones · `v0.7.0`
 - [ ] **Fase 7** — Presupuestos, ingresos, metas y multimoneda · `v0.8.0`

@@ -3,7 +3,7 @@ description: "Finanzas del Hogar: app familiar para registrar gastos e ingresos,
 publish_to: 'none'
 
 # Fase 1 = v0.2.0 (ver el plan de fases en README.md y CHANGELOG.md).
-version: 0.5.1+6
+version: 0.5.2+7
 
 environment:
   sdk: ^3.14.0
@@ -33,7 +33,7 @@ dependencies:
   package_info_plus: ^9.0.1
   open_filex: ^5.0.0
   archive: ^4.7.1
-  file_picker: ^8.3.7
+  file_picker: ^10.3.0
 
 dev_dependencies:
   flutter_test:
