@@ -64,15 +64,16 @@ Cada fase se entrega, se prueba y espera la aprobación de Esteban («listo») a
 
 - [x] **Fase 0** — Stack, estructura, repositorio y guía de instalación · `v0.1.0`
 - [x] **Fase 1** — Base de datos local, categorías, gastos manuales e inicio · `v0.2.0`
-- [ ] **Fase 2** — Usuarios, roles, PIN y seguridad · `v0.3.0`
-- [ ] **Fase 3** — Recurrentes, variables, recordatorios y notificaciones · `v0.4.0`
-- [ ] **Fase 4** — Presupuestos, ingresos, metas y multimoneda · `v0.5.0`
-- [ ] **Fase 5** — Registro por voz con confirmación · `v0.6.0`
-- [ ] **Fase 6** — Fotos de facturas y OCR · `v0.7.0`
-- [ ] **Fase 7** — Búsqueda de precios por internet · `v0.8.0`
-- [ ] **Fase 8** — Sincronización en la nube y copias de seguridad · `v0.9.0`
-- [ ] **Fase 9** — Exportación a Excel/PDF y modo oscuro · `v0.10.0`
-- [ ] **Fase 10** — Actualizaciones desde GitHub Releases y empaquetado final · `v1.0.0`
+- [x] **Fase 2** — Módulo «Fijos del mes»: gastos e ingresos fijos en tablas con totales y utilidad/deuda en colores (pedido directo de Esteban; adelanta parte de las fases 4 y 5 originales) · `v0.3.0`
+- [ ] **Fase 3** — Usuarios, roles, PIN y seguridad · `v0.4.0`
+- [ ] **Fase 4** — Recurrentes, variables, recordatorios y notificaciones · `v0.5.0`
+- [ ] **Fase 5** — Presupuestos, ingresos, metas y multimoneda · `v0.6.0`
+- [ ] **Fase 6** — Registro por voz con confirmación · `v0.7.0`
+- [ ] **Fase 7** — Fotos de facturas y OCR · `v0.8.0`
+- [ ] **Fase 8** — Búsqueda de precios por internet · `v0.9.0`
+- [ ] **Fase 9** — Sincronización en la nube y copias de seguridad · `v0.10.0`
+- [ ] **Fase 10** — Exportación a Excel/PDF y modo oscuro · `v0.11.0`
+- [ ] **Fase 11** — Actualizaciones desde GitHub Releases y empaquetado final · `v1.0.0`
 
 ## Versionado
 

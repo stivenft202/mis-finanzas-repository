@@ -117,4 +117,83 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get verGastos => 'Ver gastos';
+
+  @override
+  String get agregarGastoFijo => 'Agregar gasto fijo';
+
+  @override
+  String get agregarIngresoFijo => 'Agregar ingreso fijo';
+
+  @override
+  String get confirmarEliminarFijo => '¿Eliminar este fijo?';
+
+  @override
+  String get descripcionCorta => 'Descripción';
+
+  @override
+  String diaDelMes(int dia) {
+    return 'Día $dia';
+  }
+
+  @override
+  String get diaEtiqueta => 'Día del mes';
+
+  @override
+  String get enCero => 'Ni sobra ni falta';
+
+  @override
+  String get errorNombre => 'Escribe un nombre.';
+
+  @override
+  String get fechaRecurrente => 'Fecha recurrente';
+
+  @override
+  String get fijoEliminado => 'Fijo eliminado.';
+
+  @override
+  String get fijoGuardado => 'Fijo guardado.';
+
+  @override
+  String get fijosDelMes => 'Fijos del mes';
+
+  @override
+  String get gastoFijo => 'Gasto fijo';
+
+  @override
+  String get gastosFijos => 'GASTOS FIJOS';
+
+  @override
+  String get ingresoFijo => 'Ingreso fijo';
+
+  @override
+  String get ingresosFijos => 'INGRESOS FIJOS';
+
+  @override
+  String get nombre => 'Nombre';
+
+  @override
+  String get sinGastosFijos =>
+      'Todavía no hay gastos fijos. Agrega el primero con el botón de abajo.';
+
+  @override
+  String get sinIngresosFijos =>
+      'Todavía no hay ingresos fijos. Agrega el primero con el botón de abajo.';
+
+  @override
+  String get teFalta => 'Te falta';
+
+  @override
+  String get teSobra => 'Te sobra';
+
+  @override
+  String get totalGastos => 'TOTAL GASTOS';
+
+  @override
+  String get totalIngresos => 'TOTAL INGRESOS';
+
+  @override
+  String get utilidadDeuda => 'UTILIDAD / DEUDA';
+
+  @override
+  String get valor => 'Valor';
 }

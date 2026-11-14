@@ -71,18 +71,51 @@ class Gastos extends Table {
   DateTimeColumn get actualizadoEn => dateTime()();
 }
 
-@DriftDatabase(tables: [Categorias, Gastos])
+/// Gastos e ingresos FIJOS de cada mes (módulo «Fijos del mes», v0.3.0).
+///
+/// Son las plantillas del presupuesto mensual: el arriendo, el salario,
+/// etc. No se descuentan solos de los gastos del mes; los recordatorios
+/// y el «marcar como pagado» llegan con la fase de recurrentes.
+class Fijos extends Table {
+  IntColumn get id => integer().autoIncrement()();
+
+  /// 'gasto' o 'ingreso'.
+  TextColumn get tipo => text()();
+
+  TextColumn get nombre => text().withLength(min: 1, max: 60)();
+  TextColumn get descripcion => text().withDefault(const Constant(''))();
+
+  /// Monto en unidades menores de [moneda].
+  IntColumn get montoMenor => integer()();
+
+  /// Código de la moneda ('COP', 'USD', ...).
+  TextColumn get moneda => text().withDefault(const Constant('COP'))();
+
+  /// Día del mes en que se repite (1 a 31).
+  IntColumn get diaDelMes => integer()();
+
+  DateTimeColumn get creadoEn => dateTime()();
+  DateTimeColumn get actualizadoEn => dateTime()();
+}
+
+@DriftDatabase(tables: [Categorias, Gastos, Fijos])
 class BaseDeDatos extends _$BaseDeDatos {
   BaseDeDatos(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) async {
           await m.createAll();
           await _sembrarCategorias();
+        },
+        onUpgrade: (m, desde, hasta) async {
+          if (desde < 2) {
+            // v0.3.0: nace la tabla de gastos e ingresos fijos.
+            await m.createTable(fijos);
+          }
         },
       );
 
@@ -173,4 +206,31 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   Future<int> eliminarGasto(int id) =>
       (delete(gastos)..where((g) => g.id.equals(id))).go();
+
+  // ---------------- Fijos (gastos e ingresos de cada mes) ----------------
+
+  /// Fijos de un tipo ('gasto' o 'ingreso'), ordenados por día del mes.
+  Stream<List<Fijo>> verFijos(String tipo) {
+    return (select(fijos)
+          ..where((f) => f.tipo.equals(tipo))
+          ..orderBy([
+            (f) => OrderingTerm.asc(f.diaDelMes),
+            (f) => OrderingTerm.asc(f.nombre),
+          ]))
+        .watch();
+  }
+
+  /// Suma de los montos de un tipo de fijo.
+  Future<int> totalFijos(String tipo) async {
+    final filas =
+        await (select(fijos)..where((f) => f.tipo.equals(tipo))).get();
+    return filas.fold<int>(0, (suma, f) => suma + f.montoMenor);
+  }
+
+  Future<int> crearFijo(FijosCompanion datos) => into(fijos).insert(datos);
+
+  Future<bool> actualizarFijo(Fijo fijo) => update(fijos).replace(fijo);
+
+  Future<int> eliminarFijo(int id) =>
+      (delete(fijos)..where((f) => f.id.equals(id))).go();
 }

@@ -66,6 +66,16 @@ final totalDelMesProvider = StreamProvider<int>((ref) {
           gastos.fold<int>(0, (suma, g) => suma + g.montoBaseMenor));
 });
 
+/// Gastos fijos del mes (plantillas), ordenados por día del mes.
+final gastosFijosProvider = StreamProvider<List<Fijo>>((ref) {
+  return ref.watch(baseDeDatosProvider).verFijos('gasto');
+});
+
+/// Ingresos fijos del mes (plantillas), ordenados por día del mes.
+final ingresosFijosProvider = StreamProvider<List<Fijo>>((ref) {
+  return ref.watch(baseDeDatosProvider).verFijos('ingreso');
+});
+
 /// Busca una categoría por su id dentro de la lista ya cargada.
 Categoria? categoriaPorId(List<Categoria> categorias, int id) {
   for (final c in categorias) {

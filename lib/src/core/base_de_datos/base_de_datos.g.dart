@@ -1232,16 +1232,585 @@ class GastosCompanion extends UpdateCompanion<Gasto> {
   }
 }
 
+class $FijosTable extends Fijos with TableInfo<$FijosTable, Fijo> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FijosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _tipoMeta = const VerificationMeta('tipo');
+  @override
+  late final GeneratedColumn<String> tipo = GeneratedColumn<String>(
+    'tipo',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nombreMeta = const VerificationMeta('nombre');
+  @override
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+    'nombre',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 60,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descripcionMeta = const VerificationMeta(
+    'descripcion',
+  );
+  @override
+  late final GeneratedColumn<String> descripcion = GeneratedColumn<String>(
+    'descripcion',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _montoMenorMeta = const VerificationMeta(
+    'montoMenor',
+  );
+  @override
+  late final GeneratedColumn<int> montoMenor = GeneratedColumn<int>(
+    'monto_menor',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _monedaMeta = const VerificationMeta('moneda');
+  @override
+  late final GeneratedColumn<String> moneda = GeneratedColumn<String>(
+    'moneda',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('COP'),
+  );
+  static const VerificationMeta _diaDelMesMeta = const VerificationMeta(
+    'diaDelMes',
+  );
+  @override
+  late final GeneratedColumn<int> diaDelMes = GeneratedColumn<int>(
+    'dia_del_mes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _creadoEnMeta = const VerificationMeta(
+    'creadoEn',
+  );
+  @override
+  late final GeneratedColumn<DateTime> creadoEn = GeneratedColumn<DateTime>(
+    'creado_en',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _actualizadoEnMeta = const VerificationMeta(
+    'actualizadoEn',
+  );
+  @override
+  late final GeneratedColumn<DateTime> actualizadoEn =
+      GeneratedColumn<DateTime>(
+        'actualizado_en',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    tipo,
+    nombre,
+    descripcion,
+    montoMenor,
+    moneda,
+    diaDelMes,
+    creadoEn,
+    actualizadoEn,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'fijos';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Fijo> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('tipo')) {
+      context.handle(
+        _tipoMeta,
+        tipo.isAcceptableOrUnknown(data['tipo']!, _tipoMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_tipoMeta);
+    }
+    if (data.containsKey('nombre')) {
+      context.handle(
+        _nombreMeta,
+        nombre.isAcceptableOrUnknown(data['nombre']!, _nombreMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nombreMeta);
+    }
+    if (data.containsKey('descripcion')) {
+      context.handle(
+        _descripcionMeta,
+        descripcion.isAcceptableOrUnknown(
+          data['descripcion']!,
+          _descripcionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('monto_menor')) {
+      context.handle(
+        _montoMenorMeta,
+        montoMenor.isAcceptableOrUnknown(data['monto_menor']!, _montoMenorMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_montoMenorMeta);
+    }
+    if (data.containsKey('moneda')) {
+      context.handle(
+        _monedaMeta,
+        moneda.isAcceptableOrUnknown(data['moneda']!, _monedaMeta),
+      );
+    }
+    if (data.containsKey('dia_del_mes')) {
+      context.handle(
+        _diaDelMesMeta,
+        diaDelMes.isAcceptableOrUnknown(data['dia_del_mes']!, _diaDelMesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_diaDelMesMeta);
+    }
+    if (data.containsKey('creado_en')) {
+      context.handle(
+        _creadoEnMeta,
+        creadoEn.isAcceptableOrUnknown(data['creado_en']!, _creadoEnMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_creadoEnMeta);
+    }
+    if (data.containsKey('actualizado_en')) {
+      context.handle(
+        _actualizadoEnMeta,
+        actualizadoEn.isAcceptableOrUnknown(
+          data['actualizado_en']!,
+          _actualizadoEnMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_actualizadoEnMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Fijo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Fijo(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      tipo: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tipo'],
+      )!,
+      nombre: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nombre'],
+      )!,
+      descripcion: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}descripcion'],
+      )!,
+      montoMenor: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}monto_menor'],
+      )!,
+      moneda: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}moneda'],
+      )!,
+      diaDelMes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dia_del_mes'],
+      )!,
+      creadoEn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}creado_en'],
+      )!,
+      actualizadoEn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}actualizado_en'],
+      )!,
+    );
+  }
+
+  @override
+  $FijosTable createAlias(String alias) {
+    return $FijosTable(attachedDatabase, alias);
+  }
+}
+
+class Fijo extends DataClass implements Insertable<Fijo> {
+  final int id;
+
+  /// 'gasto' o 'ingreso'.
+  final String tipo;
+  final String nombre;
+  final String descripcion;
+
+  /// Monto en unidades menores de [moneda].
+  final int montoMenor;
+
+  /// Código de la moneda ('COP', 'USD', ...).
+  final String moneda;
+
+  /// Día del mes en que se repite (1 a 31).
+  final int diaDelMes;
+  final DateTime creadoEn;
+  final DateTime actualizadoEn;
+  const Fijo({
+    required this.id,
+    required this.tipo,
+    required this.nombre,
+    required this.descripcion,
+    required this.montoMenor,
+    required this.moneda,
+    required this.diaDelMes,
+    required this.creadoEn,
+    required this.actualizadoEn,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['tipo'] = Variable<String>(tipo);
+    map['nombre'] = Variable<String>(nombre);
+    map['descripcion'] = Variable<String>(descripcion);
+    map['monto_menor'] = Variable<int>(montoMenor);
+    map['moneda'] = Variable<String>(moneda);
+    map['dia_del_mes'] = Variable<int>(diaDelMes);
+    map['creado_en'] = Variable<DateTime>(creadoEn);
+    map['actualizado_en'] = Variable<DateTime>(actualizadoEn);
+    return map;
+  }
+
+  FijosCompanion toCompanion(bool nullToAbsent) {
+    return FijosCompanion(
+      id: Value(id),
+      tipo: Value(tipo),
+      nombre: Value(nombre),
+      descripcion: Value(descripcion),
+      montoMenor: Value(montoMenor),
+      moneda: Value(moneda),
+      diaDelMes: Value(diaDelMes),
+      creadoEn: Value(creadoEn),
+      actualizadoEn: Value(actualizadoEn),
+    );
+  }
+
+  factory Fijo.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Fijo(
+      id: serializer.fromJson<int>(json['id']),
+      tipo: serializer.fromJson<String>(json['tipo']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+      descripcion: serializer.fromJson<String>(json['descripcion']),
+      montoMenor: serializer.fromJson<int>(json['montoMenor']),
+      moneda: serializer.fromJson<String>(json['moneda']),
+      diaDelMes: serializer.fromJson<int>(json['diaDelMes']),
+      creadoEn: serializer.fromJson<DateTime>(json['creadoEn']),
+      actualizadoEn: serializer.fromJson<DateTime>(json['actualizadoEn']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'tipo': serializer.toJson<String>(tipo),
+      'nombre': serializer.toJson<String>(nombre),
+      'descripcion': serializer.toJson<String>(descripcion),
+      'montoMenor': serializer.toJson<int>(montoMenor),
+      'moneda': serializer.toJson<String>(moneda),
+      'diaDelMes': serializer.toJson<int>(diaDelMes),
+      'creadoEn': serializer.toJson<DateTime>(creadoEn),
+      'actualizadoEn': serializer.toJson<DateTime>(actualizadoEn),
+    };
+  }
+
+  Fijo copyWith({
+    int? id,
+    String? tipo,
+    String? nombre,
+    String? descripcion,
+    int? montoMenor,
+    String? moneda,
+    int? diaDelMes,
+    DateTime? creadoEn,
+    DateTime? actualizadoEn,
+  }) => Fijo(
+    id: id ?? this.id,
+    tipo: tipo ?? this.tipo,
+    nombre: nombre ?? this.nombre,
+    descripcion: descripcion ?? this.descripcion,
+    montoMenor: montoMenor ?? this.montoMenor,
+    moneda: moneda ?? this.moneda,
+    diaDelMes: diaDelMes ?? this.diaDelMes,
+    creadoEn: creadoEn ?? this.creadoEn,
+    actualizadoEn: actualizadoEn ?? this.actualizadoEn,
+  );
+  Fijo copyWithCompanion(FijosCompanion data) {
+    return Fijo(
+      id: data.id.present ? data.id.value : this.id,
+      tipo: data.tipo.present ? data.tipo.value : this.tipo,
+      nombre: data.nombre.present ? data.nombre.value : this.nombre,
+      descripcion: data.descripcion.present
+          ? data.descripcion.value
+          : this.descripcion,
+      montoMenor: data.montoMenor.present
+          ? data.montoMenor.value
+          : this.montoMenor,
+      moneda: data.moneda.present ? data.moneda.value : this.moneda,
+      diaDelMes: data.diaDelMes.present ? data.diaDelMes.value : this.diaDelMes,
+      creadoEn: data.creadoEn.present ? data.creadoEn.value : this.creadoEn,
+      actualizadoEn: data.actualizadoEn.present
+          ? data.actualizadoEn.value
+          : this.actualizadoEn,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Fijo(')
+          ..write('id: $id, ')
+          ..write('tipo: $tipo, ')
+          ..write('nombre: $nombre, ')
+          ..write('descripcion: $descripcion, ')
+          ..write('montoMenor: $montoMenor, ')
+          ..write('moneda: $moneda, ')
+          ..write('diaDelMes: $diaDelMes, ')
+          ..write('creadoEn: $creadoEn, ')
+          ..write('actualizadoEn: $actualizadoEn')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    tipo,
+    nombre,
+    descripcion,
+    montoMenor,
+    moneda,
+    diaDelMes,
+    creadoEn,
+    actualizadoEn,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Fijo &&
+          other.id == this.id &&
+          other.tipo == this.tipo &&
+          other.nombre == this.nombre &&
+          other.descripcion == this.descripcion &&
+          other.montoMenor == this.montoMenor &&
+          other.moneda == this.moneda &&
+          other.diaDelMes == this.diaDelMes &&
+          other.creadoEn == this.creadoEn &&
+          other.actualizadoEn == this.actualizadoEn);
+}
+
+class FijosCompanion extends UpdateCompanion<Fijo> {
+  final Value<int> id;
+  final Value<String> tipo;
+  final Value<String> nombre;
+  final Value<String> descripcion;
+  final Value<int> montoMenor;
+  final Value<String> moneda;
+  final Value<int> diaDelMes;
+  final Value<DateTime> creadoEn;
+  final Value<DateTime> actualizadoEn;
+  const FijosCompanion({
+    this.id = const Value.absent(),
+    this.tipo = const Value.absent(),
+    this.nombre = const Value.absent(),
+    this.descripcion = const Value.absent(),
+    this.montoMenor = const Value.absent(),
+    this.moneda = const Value.absent(),
+    this.diaDelMes = const Value.absent(),
+    this.creadoEn = const Value.absent(),
+    this.actualizadoEn = const Value.absent(),
+  });
+  FijosCompanion.insert({
+    this.id = const Value.absent(),
+    required String tipo,
+    required String nombre,
+    this.descripcion = const Value.absent(),
+    required int montoMenor,
+    this.moneda = const Value.absent(),
+    required int diaDelMes,
+    required DateTime creadoEn,
+    required DateTime actualizadoEn,
+  }) : tipo = Value(tipo),
+       nombre = Value(nombre),
+       montoMenor = Value(montoMenor),
+       diaDelMes = Value(diaDelMes),
+       creadoEn = Value(creadoEn),
+       actualizadoEn = Value(actualizadoEn);
+  static Insertable<Fijo> custom({
+    Expression<int>? id,
+    Expression<String>? tipo,
+    Expression<String>? nombre,
+    Expression<String>? descripcion,
+    Expression<int>? montoMenor,
+    Expression<String>? moneda,
+    Expression<int>? diaDelMes,
+    Expression<DateTime>? creadoEn,
+    Expression<DateTime>? actualizadoEn,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (tipo != null) 'tipo': tipo,
+      if (nombre != null) 'nombre': nombre,
+      if (descripcion != null) 'descripcion': descripcion,
+      if (montoMenor != null) 'monto_menor': montoMenor,
+      if (moneda != null) 'moneda': moneda,
+      if (diaDelMes != null) 'dia_del_mes': diaDelMes,
+      if (creadoEn != null) 'creado_en': creadoEn,
+      if (actualizadoEn != null) 'actualizado_en': actualizadoEn,
+    });
+  }
+
+  FijosCompanion copyWith({
+    Value<int>? id,
+    Value<String>? tipo,
+    Value<String>? nombre,
+    Value<String>? descripcion,
+    Value<int>? montoMenor,
+    Value<String>? moneda,
+    Value<int>? diaDelMes,
+    Value<DateTime>? creadoEn,
+    Value<DateTime>? actualizadoEn,
+  }) {
+    return FijosCompanion(
+      id: id ?? this.id,
+      tipo: tipo ?? this.tipo,
+      nombre: nombre ?? this.nombre,
+      descripcion: descripcion ?? this.descripcion,
+      montoMenor: montoMenor ?? this.montoMenor,
+      moneda: moneda ?? this.moneda,
+      diaDelMes: diaDelMes ?? this.diaDelMes,
+      creadoEn: creadoEn ?? this.creadoEn,
+      actualizadoEn: actualizadoEn ?? this.actualizadoEn,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (tipo.present) {
+      map['tipo'] = Variable<String>(tipo.value);
+    }
+    if (nombre.present) {
+      map['nombre'] = Variable<String>(nombre.value);
+    }
+    if (descripcion.present) {
+      map['descripcion'] = Variable<String>(descripcion.value);
+    }
+    if (montoMenor.present) {
+      map['monto_menor'] = Variable<int>(montoMenor.value);
+    }
+    if (moneda.present) {
+      map['moneda'] = Variable<String>(moneda.value);
+    }
+    if (diaDelMes.present) {
+      map['dia_del_mes'] = Variable<int>(diaDelMes.value);
+    }
+    if (creadoEn.present) {
+      map['creado_en'] = Variable<DateTime>(creadoEn.value);
+    }
+    if (actualizadoEn.present) {
+      map['actualizado_en'] = Variable<DateTime>(actualizadoEn.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FijosCompanion(')
+          ..write('id: $id, ')
+          ..write('tipo: $tipo, ')
+          ..write('nombre: $nombre, ')
+          ..write('descripcion: $descripcion, ')
+          ..write('montoMenor: $montoMenor, ')
+          ..write('moneda: $moneda, ')
+          ..write('diaDelMes: $diaDelMes, ')
+          ..write('creadoEn: $creadoEn, ')
+          ..write('actualizadoEn: $actualizadoEn')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BaseDeDatos extends GeneratedDatabase {
   _$BaseDeDatos(QueryExecutor e) : super(e);
   $BaseDeDatosManager get managers => $BaseDeDatosManager(this);
   late final $CategoriasTable categorias = $CategoriasTable(this);
   late final $GastosTable gastos = $GastosTable(this);
+  late final $FijosTable fijos = $FijosTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [categorias, gastos];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    categorias,
+    gastos,
+    fijos,
+  ];
 }
 
 typedef $$CategoriasTableCreateCompanionBuilder = CategoriasCompanion Function({
@@ -2046,6 +2615,282 @@ typedef $$GastosTableProcessedTableManager =
       Gasto,
       PrefetchHooks Function({bool categoriaId})
     >;
+typedef $$FijosTableCreateCompanionBuilder = FijosCompanion Function({
+  Value<int> id,
+  required String tipo,
+  required String nombre,
+  Value<String> descripcion,
+  required int montoMenor,
+  Value<String> moneda,
+  required int diaDelMes,
+  required DateTime creadoEn,
+  required DateTime actualizadoEn,
+});
+typedef $$FijosTableUpdateCompanionBuilder = FijosCompanion Function({
+  Value<int> id,
+  Value<String> tipo,
+  Value<String> nombre,
+  Value<String> descripcion,
+  Value<int> montoMenor,
+  Value<String> moneda,
+  Value<int> diaDelMes,
+  Value<DateTime> creadoEn,
+  Value<DateTime> actualizadoEn,
+});
+
+class $$FijosTableFilterComposer extends Composer<_$BaseDeDatos, $FijosTable> {
+  $$FijosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tipo => $composableBuilder(
+    column: $table.tipo,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nombre => $composableBuilder(
+    column: $table.nombre,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get descripcion => $composableBuilder(
+    column: $table.descripcion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get montoMenor => $composableBuilder(
+    column: $table.montoMenor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get moneda => $composableBuilder(
+    column: $table.moneda,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get diaDelMes => $composableBuilder(
+    column: $table.diaDelMes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get creadoEn => $composableBuilder(
+    column: $table.creadoEn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get actualizadoEn => $composableBuilder(
+    column: $table.actualizadoEn,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FijosTableOrderingComposer
+    extends Composer<_$BaseDeDatos, $FijosTable> {
+  $$FijosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tipo => $composableBuilder(
+    column: $table.tipo,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nombre => $composableBuilder(
+    column: $table.nombre,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get descripcion => $composableBuilder(
+    column: $table.descripcion,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get montoMenor => $composableBuilder(
+    column: $table.montoMenor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get moneda => $composableBuilder(
+    column: $table.moneda,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get diaDelMes => $composableBuilder(
+    column: $table.diaDelMes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get creadoEn => $composableBuilder(
+    column: $table.creadoEn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get actualizadoEn => $composableBuilder(
+    column: $table.actualizadoEn,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FijosTableAnnotationComposer
+    extends Composer<_$BaseDeDatos, $FijosTable> {
+  $$FijosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get tipo =>
+      $composableBuilder(column: $table.tipo, builder: (column) => column);
+
+  GeneratedColumn<String> get nombre =>
+      $composableBuilder(column: $table.nombre, builder: (column) => column);
+
+  GeneratedColumn<String> get descripcion => $composableBuilder(
+    column: $table.descripcion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get montoMenor => $composableBuilder(
+    column: $table.montoMenor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get moneda =>
+      $composableBuilder(column: $table.moneda, builder: (column) => column);
+
+  GeneratedColumn<int> get diaDelMes =>
+      $composableBuilder(column: $table.diaDelMes, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creadoEn =>
+      $composableBuilder(column: $table.creadoEn, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get actualizadoEn => $composableBuilder(
+    column: $table.actualizadoEn,
+    builder: (column) => column,
+  );
+}
+
+class $$FijosTableTableManager
+    extends
+        RootTableManager<
+          _$BaseDeDatos,
+          $FijosTable,
+          Fijo,
+          $$FijosTableFilterComposer,
+          $$FijosTableOrderingComposer,
+          $$FijosTableAnnotationComposer,
+          $$FijosTableCreateCompanionBuilder,
+          $$FijosTableUpdateCompanionBuilder,
+          (Fijo, BaseReferences<_$BaseDeDatos, $FijosTable, Fijo>),
+          Fijo,
+          PrefetchHooks Function()
+        > {
+  $$FijosTableTableManager(_$BaseDeDatos db, $FijosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FijosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FijosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FijosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> tipo = const Value.absent(),
+                Value<String> nombre = const Value.absent(),
+                Value<String> descripcion = const Value.absent(),
+                Value<int> montoMenor = const Value.absent(),
+                Value<String> moneda = const Value.absent(),
+                Value<int> diaDelMes = const Value.absent(),
+                Value<DateTime> creadoEn = const Value.absent(),
+                Value<DateTime> actualizadoEn = const Value.absent(),
+              }) => FijosCompanion(
+                id: id,
+                tipo: tipo,
+                nombre: nombre,
+                descripcion: descripcion,
+                montoMenor: montoMenor,
+                moneda: moneda,
+                diaDelMes: diaDelMes,
+                creadoEn: creadoEn,
+                actualizadoEn: actualizadoEn,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String tipo,
+                required String nombre,
+                Value<String> descripcion = const Value.absent(),
+                required int montoMenor,
+                Value<String> moneda = const Value.absent(),
+                required int diaDelMes,
+                required DateTime creadoEn,
+                required DateTime actualizadoEn,
+              }) => FijosCompanion.insert(
+                id: id,
+                tipo: tipo,
+                nombre: nombre,
+                descripcion: descripcion,
+                montoMenor: montoMenor,
+                moneda: moneda,
+                diaDelMes: diaDelMes,
+                creadoEn: creadoEn,
+                actualizadoEn: actualizadoEn,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$FijosTable, Fijo>(table),
+                  BaseReferences<_$BaseDeDatos, $FijosTable, Fijo>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FijosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$BaseDeDatos,
+      $FijosTable,
+      Fijo,
+      $$FijosTableFilterComposer,
+      $$FijosTableOrderingComposer,
+      $$FijosTableAnnotationComposer,
+      $$FijosTableCreateCompanionBuilder,
+      $$FijosTableUpdateCompanionBuilder,
+      (Fijo, BaseReferences<_$BaseDeDatos, $FijosTable, Fijo>),
+      Fijo,
+      PrefetchHooks Function()
+    >;
 
 class $BaseDeDatosManager {
   final _$BaseDeDatos _db;
@@ -2054,4 +2899,6 @@ class $BaseDeDatosManager {
       $$CategoriasTableTableManager(_db, _db.categorias);
   $$GastosTableTableManager get gastos =>
       $$GastosTableTableManager(_db, _db.gastos);
+  $$FijosTableTableManager get fijos =>
+      $$FijosTableTableManager(_db, _db.fijos);
 }

@@ -303,6 +303,156 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ver gastos'**
   String get verGastos;
+
+  /// No description provided for @agregarGastoFijo.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar gasto fijo'**
+  String get agregarGastoFijo;
+
+  /// No description provided for @agregarIngresoFijo.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar ingreso fijo'**
+  String get agregarIngresoFijo;
+
+  /// No description provided for @confirmarEliminarFijo.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Eliminar este fijo?'**
+  String get confirmarEliminarFijo;
+
+  /// No description provided for @descripcionCorta.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get descripcionCorta;
+
+  /// No description provided for @diaDelMes.
+  ///
+  /// In es, this message translates to:
+  /// **'Día {dia}'**
+  String diaDelMes(int dia);
+
+  /// No description provided for @diaEtiqueta.
+  ///
+  /// In es, this message translates to:
+  /// **'Día del mes'**
+  String get diaEtiqueta;
+
+  /// No description provided for @enCero.
+  ///
+  /// In es, this message translates to:
+  /// **'Ni sobra ni falta'**
+  String get enCero;
+
+  /// No description provided for @errorNombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribe un nombre.'**
+  String get errorNombre;
+
+  /// No description provided for @fechaRecurrente.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha recurrente'**
+  String get fechaRecurrente;
+
+  /// No description provided for @fijoEliminado.
+  ///
+  /// In es, this message translates to:
+  /// **'Fijo eliminado.'**
+  String get fijoEliminado;
+
+  /// No description provided for @fijoGuardado.
+  ///
+  /// In es, this message translates to:
+  /// **'Fijo guardado.'**
+  String get fijoGuardado;
+
+  /// No description provided for @fijosDelMes.
+  ///
+  /// In es, this message translates to:
+  /// **'Fijos del mes'**
+  String get fijosDelMes;
+
+  /// No description provided for @gastoFijo.
+  ///
+  /// In es, this message translates to:
+  /// **'Gasto fijo'**
+  String get gastoFijo;
+
+  /// No description provided for @gastosFijos.
+  ///
+  /// In es, this message translates to:
+  /// **'GASTOS FIJOS'**
+  String get gastosFijos;
+
+  /// No description provided for @ingresoFijo.
+  ///
+  /// In es, this message translates to:
+  /// **'Ingreso fijo'**
+  String get ingresoFijo;
+
+  /// No description provided for @ingresosFijos.
+  ///
+  /// In es, this message translates to:
+  /// **'INGRESOS FIJOS'**
+  String get ingresosFijos;
+
+  /// No description provided for @nombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get nombre;
+
+  /// No description provided for @sinGastosFijos.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay gastos fijos. Agrega el primero con el botón de abajo.'**
+  String get sinGastosFijos;
+
+  /// No description provided for @sinIngresosFijos.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no hay ingresos fijos. Agrega el primero con el botón de abajo.'**
+  String get sinIngresosFijos;
+
+  /// No description provided for @teFalta.
+  ///
+  /// In es, this message translates to:
+  /// **'Te falta'**
+  String get teFalta;
+
+  /// No description provided for @teSobra.
+  ///
+  /// In es, this message translates to:
+  /// **'Te sobra'**
+  String get teSobra;
+
+  /// No description provided for @totalGastos.
+  ///
+  /// In es, this message translates to:
+  /// **'TOTAL GASTOS'**
+  String get totalGastos;
+
+  /// No description provided for @totalIngresos.
+  ///
+  /// In es, this message translates to:
+  /// **'TOTAL INGRESOS'**
+  String get totalIngresos;
+
+  /// No description provided for @utilidadDeuda.
+  ///
+  /// In es, this message translates to:
+  /// **'UTILIDAD / DEUDA'**
+  String get utilidadDeuda;
+
+  /// No description provided for @valor.
+  ///
+  /// In es, this message translates to:
+  /// **'Valor'**
+  String get valor;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,17 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.3.0] - 2026-11-14
+
+### Agregado
+- **Módulo «Fijos del mes»** (pedido por Esteban tras probar la v0.2.0; adelanta parte de las fases de recurrentes e ingresos): dos tablas tipo Excel —gastos fijos e ingresos fijos— con nombre, descripción, valor y día del mes en que se repite cada uno.
+- Cada tabla cierra con su **TOTAL**, y abajo el resultado **UTILIDAD / DEUDA = ingresos − gastos**, en verde si sobra y en rojo si falta.
+- Agregar, editar y eliminar fijos (con «Deshacer» al eliminar), desde un botón nuevo en la pantalla de inicio.
+- Nueva tabla `fijos` en la base de datos (versión de esquema 2); la migración desde la versión 1 conserva todos los datos, con prueba automática que lo verifica.
+
+### Notas
+- Los fijos son el tablero de planeación del mes: todavía no generan gastos solos ni avisan; los recordatorios y el «marcar como pagado» llegan con la fase de recurrentes.
+
 ## [0.2.0] - 2026-11-14
 
 ### Agregado
