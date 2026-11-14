@@ -1,0 +1,53 @@
+name: finanzas_hogar
+description: "Finanzas del Hogar: app familiar para registrar gastos e ingresos, con presupuestos y metas de ahorro. En español, para Android y Windows."
+publish_to: 'none'
+
+# Fase 1 = v0.2.0 (ver el plan de fases en README.md y CHANGELOG.md).
+version: 0.2.0+2
+
+environment:
+  sdk: ^3.14.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  material_ui: ^1.1.0
+  cupertino_icons: ^1.0.8
+
+  # Estado de la app
+  flutter_riverpod: ^3.0.0
+
+  # Base de datos local cifrada (Drift sobre SQLite3MultipleCiphers)
+  drift: ^2.32.0
+  sqlite3: ^3.0.0
+
+  # Guardar la llave de cifrado en el almacenamiento seguro del equipo
+  flutter_secure_storage: ^9.2.4
+
+  # Rutas de archivos del dispositivo y formato de números/fechas
+  path_provider: ^2.1.5
+  path: ^1.9.1
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Generación de código de la base de datos (Drift)
+  build_runner: ^2.10.0
+  drift_dev: ^2.32.0
+
+flutter:
+  uses-material-design: true
+  # Genera las clases de textos desde lib/l10n/app_es.arb
+  generate: true
+
+# Cifrado de la base de datos: compila SQLite3MultipleCiphers (el sucesor
+# recomendado por Drift del clásico SQLCipher) en vez del SQLite común.
+hooks:
+  user_defines:
+    sqlite3:
+      source: sqlite3mc

@@ -63,7 +63,7 @@ El esqueleto de código con esta estructura exacta se genera al abrir la **Fase 
 Cada fase se entrega, se prueba y espera la aprobación de Esteban («listo») antes de seguir.
 
 - [x] **Fase 0** — Stack, estructura, repositorio y guía de instalación · `v0.1.0`
-- [ ] **Fase 1** — Base de datos local, categorías, gastos manuales e inicio · `v0.2.0`
+- [x] **Fase 1** — Base de datos local, categorías, gastos manuales e inicio · `v0.2.0`
 - [ ] **Fase 2** — Usuarios, roles, PIN y seguridad · `v0.3.0`
 - [ ] **Fase 3** — Recurrentes, variables, recordatorios y notificaciones · `v0.4.0`
 - [ ] **Fase 4** — Presupuestos, ingresos, metas y multimoneda · `v0.5.0`
