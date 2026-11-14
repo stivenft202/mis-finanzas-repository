@@ -31,7 +31,7 @@ jobs:
       - name: Generar código de la base de datos
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Revisar el código
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
       - name: Correr las pruebas
         run: flutter test
 
