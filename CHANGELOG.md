@@ -3,6 +3,11 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.6.2] - 2026-11-14
+
+### Corregido
+- La actualización dentro de la app en Android fallaba con «conflicto con un paquete»: cada versión se firmaba con una llave temporal distinta (la de prueba de la máquina que compila) y Android, por seguridad, no actualiza una app si la firma cambia. Desde esta versión la app se firma siempre con la misma llave permanente. En Android hay que desinstalar la versión anterior e instalar esta una última vez; de ahí en adelante el botón «Actualizar» funciona siempre.
+
 ## [0.6.1] - 2026-11-14
 
 ### Corregido

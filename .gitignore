@@ -29,3 +29,7 @@ firebase_options_local.dart
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Llave de firma de Android: NUNCA se sube al repositorio.
+*.jks
+**/key.properties
