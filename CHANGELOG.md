@@ -3,6 +3,12 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.6.0] - 2026-11-14
+
+### Agregado
+- **Fase 5 — Usuarios y seguridad:** la app ahora pide acceso. La primera vez se crea el usuario administrador; después, cada persona del hogar entra tocando su nombre con su PIN (rápido) o su contraseña. Roles: administrador (todo, incluidas las personas y la importación de respaldos), miembro (registra y edita datos) y solo lectura (mira todo, no cambia nada). Tras 5 intentos fallidos el acceso se bloquea 1 minuto, y la app se bloquea sola tras los minutos sin uso que se elijan (1, 5, 15 o nunca). Las contraseñas y PIN se guardan como huella (hash con sal) en el almacenamiento seguro del equipo, nunca en la base ni en los respaldos. En «Usuarios» cada quien cambia su contraseña y su PIN, y el administrador agrega personas, cambia roles y restablece claves.
+- **Diseño nuevo (pedido de Esteban):** botones grandes con degradados de colores en el inicio; iconos de sol y luna arriba para cambiar entre modo claro y modo oscuro (la elección queda guardada; el modo oscuro se adelantó desde la Fase 12); el botón de actualizaciones ahora tiene texto «Actualizar» y se destaca cuando hay versión nueva. Saludo con el nombre de quien entró y su rol, y botón «Salir». Al registrar un gasto, «¿Quién lo hizo?» ya viene con el nombre de quien entró.
+
 ## [0.5.2] - 2026-11-14
 
 ### Corregido

@@ -1,5 +1,10 @@
 /// Pantalla de inicio: el total del mes en grande, accesos rápidos y
-/// los últimos gastos. (El saldo completo con ingresos llega en la Fase 4.)
+/// los últimos gastos.
+///
+/// Desde la v0.6.0: botones grandes con degradados (pedido de Esteban),
+/// iconos de modo claro y modo oscuro arriba, el botón de
+/// actualizaciones con texto (ya no un icono escondido), saludo de la
+/// persona que entró y respeto de roles (solo lectura no edita).
 library;
 
 import 'package:flutter/material.dart';
@@ -9,7 +14,11 @@ import '../../app/app.dart';
 import '../../core/base_de_datos/base_de_datos.dart';
 import '../../core/monedas/monedas.dart';
 import '../../core/providers.dart';
+import '../../core/seguridad/autenticacion.dart';
+import '../../core/ui/boton_degradado.dart';
 import '../../core/utilidades/fechas.dart';
+import '../acceso/pantalla_usuarios.dart';
+import '../acceso/roles_ui.dart';
 import '../categorias/iconos_categoria.dart';
 import '../categorias/pantalla_categorias.dart';
 import '../actualizaciones/pantalla_actualizacion.dart';
@@ -22,6 +31,12 @@ import 'pantalla_gastos.dart';
 class PantallaInicio extends ConsumerWidget {
   const PantallaInicio({super.key});
 
+  void _abrirActualizacion(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const PantallaActualizacion()),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textos = context.textos;
@@ -30,23 +45,93 @@ class PantallaInicio extends ConsumerWidget {
     final gastos = ref.watch(gastosDelMesProvider);
     final categorias = ref.watch(categoriasTodasProvider).value ?? const [];
     final actualizacion = ref.watch(actualizacionDisponibleProvider).value;
+    final yo = ref.watch(usuarioActualProvider);
+    final editable = ref.watch(puedeEditarProvider);
+    final modoTema = ref.watch(modoTemaProvider);
+    final brilloSistema = MediaQuery.platformBrightnessOf(context);
+    final esOscuro = modoTema == ThemeMode.dark ||
+        (modoTema == ThemeMode.system && brilloSistema == Brightness.dark);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(textos.tituloApp),
+        title: Text(textos.tituloApp, overflow: TextOverflow.ellipsis),
         actions: [
           IconButton(
-            icon: const Icon(Icons.system_update),
-            tooltip: textos.actualizacion,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PantallaActualizacion()),
+            icon: const Icon(Icons.light_mode),
+            tooltip: textos.modoClaro,
+            style: IconButton.styleFrom(
+              backgroundColor: !esOscuro
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : null,
             ),
+            onPressed: () =>
+                ref.read(modoTemaProvider.notifier).cambiar(ThemeMode.light),
           ),
+          IconButton(
+            icon: const Icon(Icons.dark_mode),
+            tooltip: textos.modoOscuro,
+            style: IconButton.styleFrom(
+              backgroundColor: esOscuro
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : null,
+            ),
+            onPressed: () =>
+                ref.read(modoTemaProvider.notifier).cambiar(ThemeMode.dark),
+          ),
+          if (actualizacion != null)
+            FilledButton.icon(
+              icon: const Icon(Icons.system_update, size: 20),
+              label: Text(textos.actualizar),
+              onPressed: () => _abrirActualizacion(context),
+            )
+          else
+            TextButton.icon(
+              icon: const Icon(Icons.system_update, size: 20),
+              label: Text(textos.actualizar),
+              onPressed: () => _abrirActualizacion(context),
+            ),
+          const SizedBox(width: 4),
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (yo != null) ...[
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  child: Text(
+                    yo.nombre.trim().isEmpty
+                        ? '?'
+                        : yo.nombre.trim()[0].toUpperCase(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        textos.holaUsuario(yo.nombre),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(nombreRol(context, yo.rol)),
+                    ],
+                  ),
+                ),
+                TextButton.icon(
+                  icon: const Icon(Icons.logout, size: 20),
+                  label: Text(textos.salir),
+                  onPressed: () =>
+                      ref.read(controlAccesoProvider.notifier).salir(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
           if (actualizacion != null) ...[
             Card(
               color: Theme.of(context).colorScheme.primaryContainer,
@@ -70,11 +155,7 @@ class PantallaInicio extends ConsumerWidget {
                       ),
                     ),
                     FilledButton(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const PantallaActualizacion(),
-                        ),
-                      ),
+                      onPressed: () => _abrirActualizacion(context),
                       child: Text(textos.actualizar),
                     ),
                   ],
@@ -114,23 +195,42 @@ class PantallaInicio extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          FilledButton.icon(
-            style:
-                FilledButton.styleFrom(minimumSize: const Size.fromHeight(64)),
-            icon: const Icon(Icons.add_circle, size: 28),
-            label: Text(textos.agregarGasto),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const FormularioGasto()),
+          if (yo != null && yo.rol == Roles.lectura) ...[
+            const SizedBox(height: 12),
+            Card(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    const Icon(Icons.visibility),
+                    const SizedBox(width: 12),
+                    Expanded(child: Text(textos.notaSoloLectura)),
+                  ],
+                ),
+              ),
             ),
+          ],
+          const SizedBox(height: 16),
+          BotonDegradado(
+            icono: Icons.add_circle,
+            texto: textos.agregarGasto,
+            colores: const [Color(0xFF2E7D32), Color(0xFF66BB6A)],
+            alto: 68,
+            onPressed: editable
+                ? () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const FormularioGasto()),
+                    )
+                : null,
           ),
           const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.list_alt),
-                  label: Text(textos.verGastos),
+                child: BotonDegradado(
+                  icono: Icons.list_alt,
+                  texto: textos.verGastos,
+                  colores: const [Color(0xFF1565C0), Color(0xFF42A5F5)],
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const PantallaGastos()),
                   ),
@@ -138,9 +238,10 @@ class PantallaInicio extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.category),
-                  label: Text(textos.categorias),
+                child: BotonDegradado(
+                  icono: Icons.category,
+                  texto: textos.categorias,
+                  colores: const [Color(0xFF6A1B9A), Color(0xFFAB47BC)],
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const PantallaCategorias()),
@@ -150,23 +251,38 @@ class PantallaInicio extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(56)),
-            icon: const Icon(Icons.table_chart),
-            label: Text(textos.fijosDelMes),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PantallaFijos()),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: BotonDegradado(
+                  icono: Icons.table_chart,
+                  texto: textos.fijosDelMes,
+                  colores: const [Color(0xFF283593), Color(0xFF5C6BC0)],
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PantallaFijos()),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: BotonDegradado(
+                  icono: Icons.backup,
+                  texto: textos.respaldo,
+                  colores: const [Color(0xFFE65100), Color(0xFFFF9800)],
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PantallaRespaldo()),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(56)),
-            icon: const Icon(Icons.backup),
-            label: Text(textos.respaldo),
+          BotonDegradado(
+            icono: Icons.people,
+            texto: textos.usuarios,
+            colores: const [Color(0xFF00695C), Color(0xFF26A69A)],
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PantallaRespaldo()),
+              MaterialPageRoute(builder: (_) => const PantallaUsuarios()),
             ),
           ),
           const SizedBox(height: 24),
@@ -186,7 +302,11 @@ class PantallaInicio extends ConsumerWidget {
               return Column(
                 children: [
                   for (final gasto in lista.take(8))
-                    TileGasto(gasto: gasto, categorias: categorias),
+                    TileGasto(
+                      gasto: gasto,
+                      categorias: categorias,
+                      editable: editable,
+                    ),
                 ],
               );
             },
@@ -204,10 +324,18 @@ class PantallaInicio extends ConsumerWidget {
 
 /// Una fila de gasto, reutilizada en el inicio y en la lista completa.
 class TileGasto extends StatelessWidget {
-  const TileGasto({super.key, required this.gasto, required this.categorias});
+  const TileGasto({
+    super.key,
+    required this.gasto,
+    required this.categorias,
+    this.editable = true,
+  });
 
   final Gasto gasto;
   final List<Categoria> categorias;
+
+  /// Si es false (usuario de solo lectura), la fila no abre el editor.
+  final bool editable;
 
   @override
   Widget build(BuildContext context) {
@@ -229,9 +357,11 @@ class TileGasto extends StatelessWidget {
         formatoMoneda(gasto.montoMenor, gasto.moneda),
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => FormularioGasto(gasto: gasto)),
-      ),
+      onTap: editable
+          ? () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => FormularioGasto(gasto: gasto)),
+              )
+          : null,
     );
   }
 }

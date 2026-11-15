@@ -143,6 +143,7 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
   @override
   Widget build(BuildContext context) {
     final textos = context.textos;
+    final esAdmin = ref.watch(puedeAdministrarProvider);
     return Scaffold(
       appBar: AppBar(title: Text(textos.respaldo)),
       body: ListView(
@@ -170,10 +171,10 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
             ),
             icon: const Icon(Icons.download, size: 28),
             label: Text(textos.importarDatos),
-            onPressed: _trabajando ? null : _importar,
+            onPressed: (_trabajando || !esAdmin) ? null : _importar,
           ),
           const SizedBox(height: 8),
-          Text(textos.importarAyuda),
+          Text(esAdmin ? textos.importarAyuda : textos.importarSoloAdmin),
           if (_trabajando) ...[
             const SizedBox(height: 28),
             const Center(child: CircularProgressIndicator()),

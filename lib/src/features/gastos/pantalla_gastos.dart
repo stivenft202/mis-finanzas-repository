@@ -78,6 +78,7 @@ class PantallaGastos extends ConsumerWidget {
     final gastos = ref.watch(gastosDelMesProvider);
     final total = ref.watch(totalDelMesProvider);
     final categorias = ref.watch(categoriasTodasProvider).value ?? const [];
+    final editable = ref.watch(puedeEditarProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -115,14 +116,18 @@ class PantallaGastos extends ConsumerWidget {
                     return Row(
                       children: [
                         Expanded(
-                          child:
-                              TileGasto(gasto: gasto, categorias: categorias),
+                          child: TileGasto(
+                            gasto: gasto,
+                            categorias: categorias,
+                            editable: editable,
+                          ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          tooltip: textos.eliminar,
-                          onPressed: () => _eliminar(context, ref, gasto),
-                        ),
+                        if (editable)
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline),
+                            tooltip: textos.eliminar,
+                            onPressed: () => _eliminar(context, ref, gasto),
+                          ),
                       ],
                     );
                   },

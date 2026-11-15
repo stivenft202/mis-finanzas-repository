@@ -627,6 +627,348 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Actualizar'**
   String get actualizar;
+
+  /// No description provided for @bienvenidaTitulo.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienvenido a Finanzas del Hogar'**
+  String get bienvenidaTitulo;
+
+  /// No description provided for @creandoAdminIntro.
+  ///
+  /// In es, this message translates to:
+  /// **'Primero crea tu usuario. Serás el administrador: podrás agregar a tu familia y cuidar los datos de este equipo.'**
+  String get creandoAdminIntro;
+
+  /// No description provided for @crearMiUsuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear mi usuario'**
+  String get crearMiUsuario;
+
+  /// No description provided for @nombrePersona.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get nombrePersona;
+
+  /// No description provided for @contrasena.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña'**
+  String get contrasena;
+
+  /// No description provided for @confirmarContrasena.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmar contraseña'**
+  String get confirmarContrasena;
+
+  /// No description provided for @pin.
+  ///
+  /// In es, this message translates to:
+  /// **'PIN'**
+  String get pin;
+
+  /// No description provided for @pinAyuda.
+  ///
+  /// In es, this message translates to:
+  /// **'De 4 a 6 números. Es tu entrada rápida de cada día.'**
+  String get pinAyuda;
+
+  /// No description provided for @confirmarPin.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmar el PIN'**
+  String get confirmarPin;
+
+  /// No description provided for @lasClavesNoCoinciden.
+  ///
+  /// In es, this message translates to:
+  /// **'Las contraseñas no coinciden.'**
+  String get lasClavesNoCoinciden;
+
+  /// No description provided for @losPinesNoCoinciden.
+  ///
+  /// In es, this message translates to:
+  /// **'Los PIN no coinciden.'**
+  String get losPinesNoCoinciden;
+
+  /// No description provided for @eligeTuUsuario.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Quién va a entrar?'**
+  String get eligeTuUsuario;
+
+  /// No description provided for @entrar.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrar'**
+  String get entrar;
+
+  /// No description provided for @usarContrasena.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrar con mi contraseña'**
+  String get usarContrasena;
+
+  /// No description provided for @usarPin.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrar con mi PIN'**
+  String get usarPin;
+
+  /// No description provided for @pinIncorrecto.
+  ///
+  /// In es, this message translates to:
+  /// **'PIN incorrecto. Inténtalo de nuevo.'**
+  String get pinIncorrecto;
+
+  /// No description provided for @claveIncorrecta.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña incorrecta. Inténtalo de nuevo.'**
+  String get claveIncorrecta;
+
+  /// No description provided for @accesoBloqueado.
+  ///
+  /// In es, this message translates to:
+  /// **'Demasiados intentos fallidos. Espera {segundos} segundos y vuelve a intentarlo.'**
+  String accesoBloqueado(int segundos);
+
+  /// No description provided for @sinCredencialesAviso.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta persona aún no tiene contraseña en este equipo. Un administrador puede restablecerla en Usuarios.'**
+  String get sinCredencialesAviso;
+
+  /// No description provided for @appBloqueada.
+  ///
+  /// In es, this message translates to:
+  /// **'La app se bloqueó por seguridad. Escribe tu PIN para seguir.'**
+  String get appBloqueada;
+
+  /// No description provided for @cambiarDeUsuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar de usuario'**
+  String get cambiarDeUsuario;
+
+  /// No description provided for @usuarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuarios'**
+  String get usuarios;
+
+  /// No description provided for @miSeguridad.
+  ///
+  /// In es, this message translates to:
+  /// **'Mi seguridad'**
+  String get miSeguridad;
+
+  /// No description provided for @cambiarContrasena.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar mi contraseña'**
+  String get cambiarContrasena;
+
+  /// No description provided for @cambiarPin.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar mi PIN'**
+  String get cambiarPin;
+
+  /// No description provided for @contrasenaActual.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña actual'**
+  String get contrasenaActual;
+
+  /// No description provided for @contrasenaNueva.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña nueva'**
+  String get contrasenaNueva;
+
+  /// No description provided for @pinActual.
+  ///
+  /// In es, this message translates to:
+  /// **'PIN actual'**
+  String get pinActual;
+
+  /// No description provided for @pinNuevo.
+  ///
+  /// In es, this message translates to:
+  /// **'PIN nuevo'**
+  String get pinNuevo;
+
+  /// No description provided for @bloqueoAutomatico.
+  ///
+  /// In es, this message translates to:
+  /// **'Bloqueo automático'**
+  String get bloqueoAutomatico;
+
+  /// No description provided for @bloqueoNunca.
+  ///
+  /// In es, this message translates to:
+  /// **'Nunca (no bloquear)'**
+  String get bloqueoNunca;
+
+  /// No description provided for @bloqueoTras1.
+  ///
+  /// In es, this message translates to:
+  /// **'Tras 1 minuto sin usar'**
+  String get bloqueoTras1;
+
+  /// No description provided for @bloqueoTras5.
+  ///
+  /// In es, this message translates to:
+  /// **'Tras 5 minutos sin usar'**
+  String get bloqueoTras5;
+
+  /// No description provided for @bloqueoTras15.
+  ///
+  /// In es, this message translates to:
+  /// **'Tras 15 minutos sin usar'**
+  String get bloqueoTras15;
+
+  /// No description provided for @cambiosGuardados.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambios guardados.'**
+  String get cambiosGuardados;
+
+  /// No description provided for @errorClaveActual.
+  ///
+  /// In es, this message translates to:
+  /// **'La contraseña actual no coincide.'**
+  String get errorClaveActual;
+
+  /// No description provided for @errorPinActual.
+  ///
+  /// In es, this message translates to:
+  /// **'El PIN actual no coincide.'**
+  String get errorPinActual;
+
+  /// No description provided for @personasDelHogar.
+  ///
+  /// In es, this message translates to:
+  /// **'Personas del hogar'**
+  String get personasDelHogar;
+
+  /// No description provided for @agregarPersona.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar persona'**
+  String get agregarPersona;
+
+  /// No description provided for @personaCreada.
+  ///
+  /// In es, this message translates to:
+  /// **'Persona agregada.'**
+  String get personaCreada;
+
+  /// No description provided for @personaEliminada.
+  ///
+  /// In es, this message translates to:
+  /// **'Persona eliminada.'**
+  String get personaEliminada;
+
+  /// No description provided for @confirmarEliminarPersona.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Eliminar a {nombre}? Ya no podrá entrar en este equipo.'**
+  String confirmarEliminarPersona(String nombre);
+
+  /// No description provided for @noPuedesEliminarte.
+  ///
+  /// In es, this message translates to:
+  /// **'No puedes eliminarte a ti mismo.'**
+  String get noPuedesEliminarte;
+
+  /// No description provided for @ultimoAdministrador.
+  ///
+  /// In es, this message translates to:
+  /// **'Debe quedar al menos un administrador en el hogar.'**
+  String get ultimoAdministrador;
+
+  /// No description provided for @cambiarRol.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar rol'**
+  String get cambiarRol;
+
+  /// No description provided for @restablecerClave.
+  ///
+  /// In es, this message translates to:
+  /// **'Restablecer contraseña'**
+  String get restablecerClave;
+
+  /// No description provided for @restablecerPin.
+  ///
+  /// In es, this message translates to:
+  /// **'Restablecer PIN'**
+  String get restablecerPin;
+
+  /// No description provided for @rol.
+  ///
+  /// In es, this message translates to:
+  /// **'Rol'**
+  String get rol;
+
+  /// No description provided for @rolAdministrador.
+  ///
+  /// In es, this message translates to:
+  /// **'Administrador'**
+  String get rolAdministrador;
+
+  /// No description provided for @rolMiembro.
+  ///
+  /// In es, this message translates to:
+  /// **'Miembro'**
+  String get rolMiembro;
+
+  /// No description provided for @rolLectura.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo lectura'**
+  String get rolLectura;
+
+  /// No description provided for @holaUsuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Hola, {nombre}'**
+  String holaUsuario(String nombre);
+
+  /// No description provided for @salir.
+  ///
+  /// In es, this message translates to:
+  /// **'Salir'**
+  String get salir;
+
+  /// No description provided for @notaSoloLectura.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu usuario es de solo lectura: puedes mirar todo, pero no cambiar datos.'**
+  String get notaSoloLectura;
+
+  /// No description provided for @importarSoloAdmin.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo un administrador puede importar datos, porque importar reemplaza todo lo que hay en el equipo.'**
+  String get importarSoloAdmin;
+
+  /// No description provided for @modoClaro.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo claro'**
+  String get modoClaro;
+
+  /// No description provided for @modoOscuro.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo oscuro'**
+  String get modoOscuro;
 }
 
 class _AppLocalizationsDelegate

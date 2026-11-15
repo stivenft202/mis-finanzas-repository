@@ -66,16 +66,19 @@ class PantallaCategorias extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textos = context.textos;
     final categoriasAsync = ref.watch(categoriasTodasProvider);
+    final editable = ref.watch(puedeEditarProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(textos.categorias)),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add),
-        label: Text(textos.nuevaCategoria),
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const FormularioCategoria()),
-        ),
-      ),
+      floatingActionButton: editable
+          ? FloatingActionButton.extended(
+              icon: const Icon(Icons.add),
+              label: Text(textos.nuevaCategoria),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const FormularioCategoria()),
+              ),
+            )
+          : null,
       body: categoriasAsync.when(
         data: (categorias) => ListView.builder(
           padding: const EdgeInsets.only(bottom: 96),
@@ -98,7 +101,9 @@ class PantallaCategorias extends ConsumerWidget {
               subtitle: c.tipoFactura == null || c.tipoFactura!.isEmpty
                   ? null
                   : Text(c.tipoFactura!),
-              trailing: PopupMenuButton<String>(
+              trailing: !editable
+                  ? null
+                  : PopupMenuButton<String>(
                 onSelected: (accion) async {
                   final base = ref.read(baseDeDatosProvider);
                   switch (accion) {

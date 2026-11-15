@@ -9,12 +9,23 @@ void main() {
   testWidgets('la pantalla de inicio muestra el total y el botón de agregar',
       (tester) async {
     final base = BaseDeDatos(NativeDatabase.memory());
+    // Desde la Fase 5 la app pide acceso: la prueba entra ya con la
+    // sesión de un administrador abierta.
+    final admin = Usuario(
+      id: 1,
+      nombre: 'Esteban',
+      rol: 'administrador',
+      creadoEn: DateTime(2026, 1, 1),
+    );
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           claveCifradoProvider.overrideWithValue('clave-de-prueba'),
           baseDeDatosProvider.overrideWithValue(base),
+          usuariosProvider.overrideWith((ref) => Stream.value([admin])),
+          accesoInicialProvider
+              .overrideWithValue(const EstadoAcceso(usuarioId: 1)),
         ],
         child: const AppFinanzas(),
       ),

@@ -4,10 +4,12 @@
 /// proveedores, y cuando los datos cambian, la pantalla se actualiza sola.
 library;
 
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'base_de_datos/base_de_datos.dart';
 import 'base_de_datos/conexion.dart';
+import 'seguridad/autenticacion.dart';
 import 'utilidades/fechas.dart';
 
 /// Llave de cifrado de la base. Se lee en `main()` antes de abrir la app
@@ -83,3 +85,117 @@ Categoria? categoriaPorId(List<Categoria> categorias, int id) {
   }
   return null;
 }
+
+// ---------------- Seguridad y acceso (Fase 5, v0.6.0) ----------------
+
+/// Donde viven las huellas de las claves (almacenamiento seguro).
+final almacenClavesProvider = Provider<AlmacenClaves>(
+  (ref) => AlmacenClavesSeguro(),
+);
+
+/// El servicio que comprueba contraseñas y PIN.
+final servicioAutenticacionProvider = Provider<ServicioAutenticacion>(
+  (ref) => ServicioAutenticacion(
+    ref.watch(baseDeDatosProvider),
+    ref.watch(almacenClavesProvider),
+  ),
+);
+
+/// Todas las personas del hogar.
+final usuariosProvider = StreamProvider<List<Usuario>>((ref) {
+  return ref.watch(baseDeDatosProvider).verUsuarios();
+});
+
+/// Estado del acceso: quién entró (por id) y si la app está bloqueada
+/// por inactividad. Sin id = nadie ha entrado todavía.
+class EstadoAcceso {
+  const EstadoAcceso({this.usuarioId, this.bloqueada = false});
+
+  final int? usuarioId;
+  final bool bloqueada;
+
+  bool get haySesion => usuarioId != null;
+}
+
+/// Estado inicial del acceso. Lo sobreescriben `main()` (nadie dentro)
+/// y las pruebas (una sesión ya abierta).
+final accesoInicialProvider = Provider<EstadoAcceso>(
+  (ref) => const EstadoAcceso(),
+);
+
+class ControlAcceso extends Notifier<EstadoAcceso> {
+  @override
+  EstadoAcceso build() => ref.watch(accesoInicialProvider);
+
+  void entrar(int usuarioId) => state = EstadoAcceso(usuarioId: usuarioId);
+
+  /// Bloqueo por inactividad: la sesión sigue, pero pide el PIN.
+  void bloquear() {
+    final id = state.usuarioId;
+    if (id != null) state = EstadoAcceso(usuarioId: id, bloqueada: true);
+  }
+
+  void desbloquear() {
+    final id = state.usuarioId;
+    if (id != null) state = EstadoAcceso(usuarioId: id);
+  }
+
+  void salir() => state = const EstadoAcceso();
+}
+
+final controlAccesoProvider =
+    NotifierProvider<ControlAcceso, EstadoAcceso>(ControlAcceso.new);
+
+/// La persona que tiene la sesión abierta (dato fresco de la base).
+final usuarioActualProvider = Provider<Usuario?>((ref) {
+  final id = ref.watch(controlAccesoProvider).usuarioId;
+  if (id == null) return null;
+  final usuarios = ref.watch(usuariosProvider).value ?? const <Usuario>[];
+  for (final u in usuarios) {
+    if (u.id == id) return u;
+  }
+  return null;
+});
+
+/// ¿La sesión actual puede crear y editar datos?
+final puedeEditarProvider = Provider<bool>((ref) {
+  final usuario = ref.watch(usuarioActualProvider);
+  return usuario != null && puedeEditar(usuario.rol);
+});
+
+/// ¿La sesión actual es de un administrador?
+final puedeAdministrarProvider = Provider<bool>((ref) {
+  final usuario = ref.watch(usuarioActualProvider);
+  return usuario != null && puedeAdministrar(usuario.rol);
+});
+
+/// Minutos sin usar la app antes del bloqueo automático (0 = nunca).
+/// Se guarda en el almacenamiento seguro; por defecto, 5.
+final autoBloqueoMinutosProvider = FutureProvider<int>((ref) async {
+  final texto = await ref.watch(almacenClavesProvider).leer('autobloqueo_min');
+  return int.tryParse(texto ?? '') ?? 5;
+});
+
+// ---------------- Tema claro / oscuro ----------------
+
+/// Tema con el que arranca la app, leído en `main()` del guardado.
+final temaInicialProvider = Provider<ThemeMode>((ref) => ThemeMode.system);
+
+/// El modo de tema elegido (claro, oscuro o el del sistema), con
+/// memoria: lo que la persona elija queda guardado para la próxima vez.
+class ModoTema extends Notifier<ThemeMode> {
+  @override
+  ThemeMode build() => ref.watch(temaInicialProvider);
+
+  Future<void> cambiar(ThemeMode modo) async {
+    state = modo;
+    final valor = switch (modo) {
+      ThemeMode.light => 'claro',
+      ThemeMode.dark => 'oscuro',
+      ThemeMode.system => 'sistema',
+    };
+    await ref.read(almacenClavesProvider).guardar('tema_modo', valor);
+  }
+}
+
+final modoTemaProvider = NotifierProvider<ModoTema, ThemeMode>(ModoTema.new);

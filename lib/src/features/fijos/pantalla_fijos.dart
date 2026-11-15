@@ -90,6 +90,7 @@ class PantallaFijos extends ConsumerWidget {
     List<Fijo> ingresos,
   ) {
     final textos = context.textos;
+    final editable = ref.watch(puedeEditarProvider);
     final totalGastos = totalDeFijos(gastos);
     final totalIngresos = totalDeFijos(ingresos);
     final resultado = totalIngresos - totalGastos;
@@ -102,16 +103,21 @@ class PantallaFijos extends ConsumerWidget {
           fijos: gastos,
           textoVacio: textos.sinGastosFijos,
           textoTotal: textos.totalGastos,
-          onTocar: (fijo) =>
-              _abrirFormulario(context, ref, tipo: 'gasto', fijo: fijo),
+          onTocar: editable
+              ? (fijo) =>
+                  _abrirFormulario(context, ref, tipo: 'gasto', fijo: fijo)
+              : null,
         ),
-        const SizedBox(height: 12),
-        FilledButton.icon(
-          style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-          icon: const Icon(Icons.add_circle, size: 26),
-          label: Text(textos.agregarGastoFijo),
-          onPressed: () => _abrirFormulario(context, ref, tipo: 'gasto'),
-        ),
+        if (editable) ...[
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            style:
+                FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
+            icon: const Icon(Icons.add_circle, size: 26),
+            label: Text(textos.agregarGastoFijo),
+            onPressed: () => _abrirFormulario(context, ref, tipo: 'gasto'),
+          ),
+        ],
         const SizedBox(height: 28),
         _TablaFijos(
           encabezado: textos.ingresosFijos,
@@ -119,16 +125,21 @@ class PantallaFijos extends ConsumerWidget {
           fijos: ingresos,
           textoVacio: textos.sinIngresosFijos,
           textoTotal: textos.totalIngresos,
-          onTocar: (fijo) =>
-              _abrirFormulario(context, ref, tipo: 'ingreso', fijo: fijo),
+          onTocar: editable
+              ? (fijo) =>
+                  _abrirFormulario(context, ref, tipo: 'ingreso', fijo: fijo)
+              : null,
         ),
-        const SizedBox(height: 12),
-        FilledButton.icon(
-          style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-          icon: const Icon(Icons.add_circle, size: 26),
-          label: Text(textos.agregarIngresoFijo),
-          onPressed: () => _abrirFormulario(context, ref, tipo: 'ingreso'),
-        ),
+        if (editable) ...[
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            style:
+                FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
+            icon: const Icon(Icons.add_circle, size: 26),
+            label: Text(textos.agregarIngresoFijo),
+            onPressed: () => _abrirFormulario(context, ref, tipo: 'ingreso'),
+          ),
+        ],
         const SizedBox(height: 28),
         _Resultado(resultado: resultado),
       ],
@@ -152,7 +163,9 @@ class _TablaFijos extends StatelessWidget {
   final List<Fijo> fijos;
   final String textoVacio;
   final String textoTotal;
-  final void Function(Fijo fijo) onTocar;
+
+  /// Al tocar una fila (null si el usuario es de solo lectura).
+  final void Function(Fijo fijo)? onTocar;
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +220,7 @@ class _TablaFijos extends StatelessWidget {
             for (var i = 0; i < fijos.length; i++) ...[
               if (i > 0) const Divider(height: 1),
               InkWell(
-                onTap: () => onTocar(fijos[i]),
+                onTap: onTocar == null ? null : () => onTocar!(fijos[i]),
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

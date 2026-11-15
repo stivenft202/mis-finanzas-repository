@@ -301,4 +301,187 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get actualizar => 'Actualizar';
+
+  @override
+  String get bienvenidaTitulo => 'Bienvenido a Finanzas del Hogar';
+
+  @override
+  String get creandoAdminIntro =>
+      'Primero crea tu usuario. Serás el administrador: podrás agregar a tu familia y cuidar los datos de este equipo.';
+
+  @override
+  String get crearMiUsuario => 'Crear mi usuario';
+
+  @override
+  String get nombrePersona => 'Nombre';
+
+  @override
+  String get contrasena => 'Contraseña';
+
+  @override
+  String get confirmarContrasena => 'Confirmar contraseña';
+
+  @override
+  String get pin => 'PIN';
+
+  @override
+  String get pinAyuda => 'De 4 a 6 números. Es tu entrada rápida de cada día.';
+
+  @override
+  String get confirmarPin => 'Confirmar el PIN';
+
+  @override
+  String get lasClavesNoCoinciden => 'Las contraseñas no coinciden.';
+
+  @override
+  String get losPinesNoCoinciden => 'Los PIN no coinciden.';
+
+  @override
+  String get eligeTuUsuario => '¿Quién va a entrar?';
+
+  @override
+  String get entrar => 'Entrar';
+
+  @override
+  String get usarContrasena => 'Entrar con mi contraseña';
+
+  @override
+  String get usarPin => 'Entrar con mi PIN';
+
+  @override
+  String get pinIncorrecto => 'PIN incorrecto. Inténtalo de nuevo.';
+
+  @override
+  String get claveIncorrecta => 'Contraseña incorrecta. Inténtalo de nuevo.';
+
+  @override
+  String accesoBloqueado(int segundos) {
+    return 'Demasiados intentos fallidos. Espera $segundos segundos y vuelve a intentarlo.';
+  }
+
+  @override
+  String get sinCredencialesAviso =>
+      'Esta persona aún no tiene contraseña en este equipo. Un administrador puede restablecerla en Usuarios.';
+
+  @override
+  String get appBloqueada =>
+      'La app se bloqueó por seguridad. Escribe tu PIN para seguir.';
+
+  @override
+  String get cambiarDeUsuario => 'Cambiar de usuario';
+
+  @override
+  String get usuarios => 'Usuarios';
+
+  @override
+  String get miSeguridad => 'Mi seguridad';
+
+  @override
+  String get cambiarContrasena => 'Cambiar mi contraseña';
+
+  @override
+  String get cambiarPin => 'Cambiar mi PIN';
+
+  @override
+  String get contrasenaActual => 'Contraseña actual';
+
+  @override
+  String get contrasenaNueva => 'Contraseña nueva';
+
+  @override
+  String get pinActual => 'PIN actual';
+
+  @override
+  String get pinNuevo => 'PIN nuevo';
+
+  @override
+  String get bloqueoAutomatico => 'Bloqueo automático';
+
+  @override
+  String get bloqueoNunca => 'Nunca (no bloquear)';
+
+  @override
+  String get bloqueoTras1 => 'Tras 1 minuto sin usar';
+
+  @override
+  String get bloqueoTras5 => 'Tras 5 minutos sin usar';
+
+  @override
+  String get bloqueoTras15 => 'Tras 15 minutos sin usar';
+
+  @override
+  String get cambiosGuardados => 'Cambios guardados.';
+
+  @override
+  String get errorClaveActual => 'La contraseña actual no coincide.';
+
+  @override
+  String get errorPinActual => 'El PIN actual no coincide.';
+
+  @override
+  String get personasDelHogar => 'Personas del hogar';
+
+  @override
+  String get agregarPersona => 'Agregar persona';
+
+  @override
+  String get personaCreada => 'Persona agregada.';
+
+  @override
+  String get personaEliminada => 'Persona eliminada.';
+
+  @override
+  String confirmarEliminarPersona(String nombre) {
+    return '¿Eliminar a $nombre? Ya no podrá entrar en este equipo.';
+  }
+
+  @override
+  String get noPuedesEliminarte => 'No puedes eliminarte a ti mismo.';
+
+  @override
+  String get ultimoAdministrador =>
+      'Debe quedar al menos un administrador en el hogar.';
+
+  @override
+  String get cambiarRol => 'Cambiar rol';
+
+  @override
+  String get restablecerClave => 'Restablecer contraseña';
+
+  @override
+  String get restablecerPin => 'Restablecer PIN';
+
+  @override
+  String get rol => 'Rol';
+
+  @override
+  String get rolAdministrador => 'Administrador';
+
+  @override
+  String get rolMiembro => 'Miembro';
+
+  @override
+  String get rolLectura => 'Solo lectura';
+
+  @override
+  String holaUsuario(String nombre) {
+    return 'Hola, $nombre';
+  }
+
+  @override
+  String get salir => 'Salir';
+
+  @override
+  String get notaSoloLectura =>
+      'Tu usuario es de solo lectura: puedes mirar todo, pero no cambiar datos.';
+
+  @override
+  String get importarSoloAdmin =>
+      'Solo un administrador puede importar datos, porque importar reemplaza todo lo que hay en el equipo.';
+
+  @override
+  String get modoClaro => 'Modo claro';
+
+  @override
+  String get modoOscuro => 'Modo oscuro';
 }

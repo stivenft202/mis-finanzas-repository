@@ -115,10 +115,20 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
     Navigator.of(context).pop();
   }
 
+  bool _hechoPorListo = false;
+
   @override
   Widget build(BuildContext context) {
     final textos = context.textos;
     final categoriasAsync = ref.watch(categoriasVisiblesProvider);
+    final soloLectura = !ref.watch(puedeEditarProvider);
+    // En un gasto nuevo, «¿Quién lo hizo?» viene con el nombre de la
+    // persona que entró (se puede cambiar si registró por otra).
+    final yo = ref.watch(usuarioActualProvider);
+    if (widget.gasto == null && !_hechoPorListo && yo != null) {
+      _hechoPorCtrl.text = yo.nombre;
+      _hechoPorListo = true;
+    }
     final metodos = <String, String>{
       'efectivo': textos.efectivo,
       'tarjeta': textos.tarjeta,
@@ -137,6 +147,7 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
         children: [
           TextField(
             controller: _montoCtrl,
+            enabled: !soloLectura,
             keyboardType:
                 const TextInputType.numberWithOptions(decimal: true),
             style: Theme.of(context).textTheme.headlineLarge,
@@ -166,7 +177,9 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
                       ),
                       label: Text(c.nombre),
                       selected: _categoriaId == c.id,
-                      onSelected: (_) => setState(() => _categoriaId = c.id),
+                      onSelected: soloLectura
+                          ? null
+                          : (_) => setState(() => _categoriaId = c.id),
                     ),
                 ],
               );
@@ -177,6 +190,7 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
           const SizedBox(height: 20),
           TextField(
             controller: _descripcionCtrl,
+            enabled: !soloLectura,
             decoration: InputDecoration(labelText: textos.descripcion),
           ),
           const SizedBox(height: 16),
@@ -185,6 +199,7 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
               Expanded(
                 child: TextField(
                   controller: _hechoPorCtrl,
+                  enabled: !soloLectura,
                   decoration: InputDecoration(labelText: textos.quienLoHizo),
                 ),
               ),
@@ -193,7 +208,9 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.calendar_today),
                   label: Text('${textos.fecha}: ${fechaCorta(_fecha)}'),
-                  onPressed: () async {
+                  onPressed: soloLectura
+                      ? null
+                      : () async {
                     final elegida = await showDatePicker(
                       context: context,
                       initialDate: _fecha,
@@ -217,8 +234,9 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
                 ChoiceChip(
                   label: Text(entrada.value),
                   selected: _metodoPago == entrada.key,
-                  onSelected: (_) =>
-                      setState(() => _metodoPago = entrada.key),
+                  onSelected: soloLectura
+                      ? null
+                      : (_) => setState(() => _metodoPago = entrada.key),
                 ),
             ],
           ),
@@ -233,13 +251,16 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
             ),
           ],
           const SizedBox(height: 28),
-          FilledButton.icon(
-            style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(64)),
-            icon: const Icon(Icons.save, size: 26),
-            label: Text(textos.guardar),
-            onPressed: _guardar,
-          ),
+          if (soloLectura)
+            Text(textos.notaSoloLectura, textAlign: TextAlign.center)
+          else
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(64)),
+              icon: const Icon(Icons.save, size: 26),
+              label: Text(textos.guardar),
+              onPressed: _guardar,
+            ),
         ],
       ),
     );

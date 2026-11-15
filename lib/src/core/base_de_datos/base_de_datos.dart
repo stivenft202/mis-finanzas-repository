@@ -98,12 +98,27 @@ class Fijos extends Table {
   DateTimeColumn get actualizadoEn => dateTime()();
 }
 
-@DriftDatabase(tables: [Categorias, Gastos, Fijos])
+/// Personas del hogar que pueden entrar a la app (Fase 5, v0.6.0).
+///
+/// Aquí solo vive lo público: el nombre y el rol. Las contraseñas y los
+/// PIN nunca se guardan en la base: van con hash al almacenamiento
+/// seguro del equipo (ver `core/seguridad/autenticacion.dart`).
+class Usuarios extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get nombre => text().withLength(min: 1, max: 60)();
+
+  /// 'administrador', 'miembro' o 'lectura'.
+  TextColumn get rol => text().withDefault(const Constant('miembro'))();
+
+  DateTimeColumn get creadoEn => dateTime()();
+}
+
+@DriftDatabase(tables: [Categorias, Gastos, Fijos, Usuarios])
 class BaseDeDatos extends _$BaseDeDatos {
   BaseDeDatos(super.executor);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -115,6 +130,10 @@ class BaseDeDatos extends _$BaseDeDatos {
           if (desde < 2) {
             // v0.3.0: nace la tabla de gastos e ingresos fijos.
             await m.createTable(fijos);
+          }
+          if (desde < 3) {
+            // v0.6.0: nacen los usuarios del hogar (roles y acceso).
+            await m.createTable(usuarios);
           }
         },
       );
@@ -234,11 +253,54 @@ class BaseDeDatos extends _$BaseDeDatos {
   Future<int> eliminarFijo(int id) =>
       (delete(fijos)..where((f) => f.id.equals(id))).go();
 
+  // ---------------- Usuarios del hogar ----------------
+
+  /// Todas las personas del hogar, en orden alfabético.
+  Stream<List<Usuario>> verUsuarios() {
+    return (select(usuarios)
+          ..orderBy([(u) => OrderingTerm.asc(u.nombre)]))
+        .watch();
+  }
+
+  Future<List<Usuario>> listaUsuarios() => (select(usuarios)
+        ..orderBy([(u) => OrderingTerm.asc(u.nombre)]))
+      .get();
+
+  Future<Usuario?> usuarioPorId(int id) =>
+      (select(usuarios)..where((u) => u.id.equals(id))).getSingleOrNull();
+
+  /// Busca por nombre, sin distinguir mayúsculas (para el acceso).
+  Future<Usuario?> usuarioPorNombre(String nombre) async {
+    final buscado = nombre.trim().toLowerCase();
+    final todos = await listaUsuarios();
+    for (final u in todos) {
+      if (u.nombre.trim().toLowerCase() == buscado) return u;
+    }
+    return null;
+  }
+
+  Future<int> crearUsuario(UsuariosCompanion datos) =>
+      into(usuarios).insert(datos);
+
+  Future<bool> actualizarUsuario(Usuario usuario) =>
+      update(usuarios).replace(usuario);
+
+  Future<int> eliminarUsuario(int id) =>
+      (delete(usuarios)..where((u) => u.id.equals(id))).go();
+
+  Future<int> contarAdministradores() async {
+    final todos = await listaUsuarios();
+    return todos.where((u) => u.rol == 'administrador').length;
+  }
+
   // ---------------- Respaldo (exportar / importar) ----------------
 
   /// Todos los datos del hogar en un mapa listo para guardar como JSON
   /// en un solo archivo (módulo «Respaldo», v0.4.0). Con ese archivo la
   /// persona pasa su app de un equipo a otro sin reingresar nada.
+  ///
+  /// Ojo: las personas (usuarios) y sus claves NO viajan en el respaldo,
+  /// por seguridad: son de cada equipo y se crean en cada uno.
   Future<Map<String, Object?>> exportarDatos() async {
     final listaCategorias = await select(categorias).get();
     final listaGastos = await select(gastos).get();

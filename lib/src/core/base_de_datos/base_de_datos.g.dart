@@ -1796,12 +1796,312 @@ class FijosCompanion extends UpdateCompanion<Fijo> {
   }
 }
 
+class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UsuariosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nombreMeta = const VerificationMeta('nombre');
+  @override
+  late final GeneratedColumn<String> nombre = GeneratedColumn<String>(
+    'nombre',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 60,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _rolMeta = const VerificationMeta('rol');
+  @override
+  late final GeneratedColumn<String> rol = GeneratedColumn<String>(
+    'rol',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('miembro'),
+  );
+  static const VerificationMeta _creadoEnMeta = const VerificationMeta(
+    'creadoEn',
+  );
+  @override
+  late final GeneratedColumn<DateTime> creadoEn = GeneratedColumn<DateTime>(
+    'creado_en',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, nombre, rol, creadoEn];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'usuarios';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Usuario> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('nombre')) {
+      context.handle(
+        _nombreMeta,
+        nombre.isAcceptableOrUnknown(data['nombre']!, _nombreMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nombreMeta);
+    }
+    if (data.containsKey('rol')) {
+      context.handle(
+        _rolMeta,
+        rol.isAcceptableOrUnknown(data['rol']!, _rolMeta),
+      );
+    }
+    if (data.containsKey('creado_en')) {
+      context.handle(
+        _creadoEnMeta,
+        creadoEn.isAcceptableOrUnknown(data['creado_en']!, _creadoEnMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_creadoEnMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Usuario map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Usuario(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      nombre: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}nombre'],
+      )!,
+      rol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rol'],
+      )!,
+      creadoEn: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}creado_en'],
+      )!,
+    );
+  }
+
+  @override
+  $UsuariosTable createAlias(String alias) {
+    return $UsuariosTable(attachedDatabase, alias);
+  }
+}
+
+class Usuario extends DataClass implements Insertable<Usuario> {
+  final int id;
+  final String nombre;
+
+  /// 'administrador', 'miembro' o 'lectura'.
+  final String rol;
+  final DateTime creadoEn;
+  const Usuario({
+    required this.id,
+    required this.nombre,
+    required this.rol,
+    required this.creadoEn,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['nombre'] = Variable<String>(nombre);
+    map['rol'] = Variable<String>(rol);
+    map['creado_en'] = Variable<DateTime>(creadoEn);
+    return map;
+  }
+
+  UsuariosCompanion toCompanion(bool nullToAbsent) {
+    return UsuariosCompanion(
+      id: Value(id),
+      nombre: Value(nombre),
+      rol: Value(rol),
+      creadoEn: Value(creadoEn),
+    );
+  }
+
+  factory Usuario.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Usuario(
+      id: serializer.fromJson<int>(json['id']),
+      nombre: serializer.fromJson<String>(json['nombre']),
+      rol: serializer.fromJson<String>(json['rol']),
+      creadoEn: serializer.fromJson<DateTime>(json['creadoEn']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'nombre': serializer.toJson<String>(nombre),
+      'rol': serializer.toJson<String>(rol),
+      'creadoEn': serializer.toJson<DateTime>(creadoEn),
+    };
+  }
+
+  Usuario copyWith({
+    int? id,
+    String? nombre,
+    String? rol,
+    DateTime? creadoEn,
+  }) => Usuario(
+    id: id ?? this.id,
+    nombre: nombre ?? this.nombre,
+    rol: rol ?? this.rol,
+    creadoEn: creadoEn ?? this.creadoEn,
+  );
+  Usuario copyWithCompanion(UsuariosCompanion data) {
+    return Usuario(
+      id: data.id.present ? data.id.value : this.id,
+      nombre: data.nombre.present ? data.nombre.value : this.nombre,
+      rol: data.rol.present ? data.rol.value : this.rol,
+      creadoEn: data.creadoEn.present ? data.creadoEn.value : this.creadoEn,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Usuario(')
+          ..write('id: $id, ')
+          ..write('nombre: $nombre, ')
+          ..write('rol: $rol, ')
+          ..write('creadoEn: $creadoEn')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, nombre, rol, creadoEn);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Usuario &&
+          other.id == this.id &&
+          other.nombre == this.nombre &&
+          other.rol == this.rol &&
+          other.creadoEn == this.creadoEn);
+}
+
+class UsuariosCompanion extends UpdateCompanion<Usuario> {
+  final Value<int> id;
+  final Value<String> nombre;
+  final Value<String> rol;
+  final Value<DateTime> creadoEn;
+  const UsuariosCompanion({
+    this.id = const Value.absent(),
+    this.nombre = const Value.absent(),
+    this.rol = const Value.absent(),
+    this.creadoEn = const Value.absent(),
+  });
+  UsuariosCompanion.insert({
+    this.id = const Value.absent(),
+    required String nombre,
+    this.rol = const Value.absent(),
+    required DateTime creadoEn,
+  }) : nombre = Value(nombre),
+       creadoEn = Value(creadoEn);
+  static Insertable<Usuario> custom({
+    Expression<int>? id,
+    Expression<String>? nombre,
+    Expression<String>? rol,
+    Expression<DateTime>? creadoEn,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (nombre != null) 'nombre': nombre,
+      if (rol != null) 'rol': rol,
+      if (creadoEn != null) 'creado_en': creadoEn,
+    });
+  }
+
+  UsuariosCompanion copyWith({
+    Value<int>? id,
+    Value<String>? nombre,
+    Value<String>? rol,
+    Value<DateTime>? creadoEn,
+  }) {
+    return UsuariosCompanion(
+      id: id ?? this.id,
+      nombre: nombre ?? this.nombre,
+      rol: rol ?? this.rol,
+      creadoEn: creadoEn ?? this.creadoEn,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (nombre.present) {
+      map['nombre'] = Variable<String>(nombre.value);
+    }
+    if (rol.present) {
+      map['rol'] = Variable<String>(rol.value);
+    }
+    if (creadoEn.present) {
+      map['creado_en'] = Variable<DateTime>(creadoEn.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UsuariosCompanion(')
+          ..write('id: $id, ')
+          ..write('nombre: $nombre, ')
+          ..write('rol: $rol, ')
+          ..write('creadoEn: $creadoEn')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$BaseDeDatos extends GeneratedDatabase {
   _$BaseDeDatos(QueryExecutor e) : super(e);
   $BaseDeDatosManager get managers => $BaseDeDatosManager(this);
   late final $CategoriasTable categorias = $CategoriasTable(this);
   late final $GastosTable gastos = $GastosTable(this);
   late final $FijosTable fijos = $FijosTable(this);
+  late final $UsuariosTable usuarios = $UsuariosTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1810,6 +2110,7 @@ abstract class _$BaseDeDatos extends GeneratedDatabase {
     categorias,
     gastos,
     fijos,
+    usuarios,
   ];
 }
 
@@ -2891,6 +3192,182 @@ typedef $$FijosTableProcessedTableManager =
       Fijo,
       PrefetchHooks Function()
     >;
+typedef $$UsuariosTableCreateCompanionBuilder = UsuariosCompanion Function({
+  Value<int> id,
+  required String nombre,
+  Value<String> rol,
+  required DateTime creadoEn,
+});
+typedef $$UsuariosTableUpdateCompanionBuilder = UsuariosCompanion Function({
+  Value<int> id,
+  Value<String> nombre,
+  Value<String> rol,
+  Value<DateTime> creadoEn,
+});
+
+class $$UsuariosTableFilterComposer
+    extends Composer<_$BaseDeDatos, $UsuariosTable> {
+  $$UsuariosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get nombre => $composableBuilder(
+    column: $table.nombre,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get rol => $composableBuilder(
+    column: $table.rol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get creadoEn => $composableBuilder(
+    column: $table.creadoEn,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UsuariosTableOrderingComposer
+    extends Composer<_$BaseDeDatos, $UsuariosTable> {
+  $$UsuariosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get nombre => $composableBuilder(
+    column: $table.nombre,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get rol => $composableBuilder(
+    column: $table.rol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get creadoEn => $composableBuilder(
+    column: $table.creadoEn,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UsuariosTableAnnotationComposer
+    extends Composer<_$BaseDeDatos, $UsuariosTable> {
+  $$UsuariosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get nombre =>
+      $composableBuilder(column: $table.nombre, builder: (column) => column);
+
+  GeneratedColumn<String> get rol =>
+      $composableBuilder(column: $table.rol, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creadoEn =>
+      $composableBuilder(column: $table.creadoEn, builder: (column) => column);
+}
+
+class $$UsuariosTableTableManager
+    extends
+        RootTableManager<
+          _$BaseDeDatos,
+          $UsuariosTable,
+          Usuario,
+          $$UsuariosTableFilterComposer,
+          $$UsuariosTableOrderingComposer,
+          $$UsuariosTableAnnotationComposer,
+          $$UsuariosTableCreateCompanionBuilder,
+          $$UsuariosTableUpdateCompanionBuilder,
+          (Usuario, BaseReferences<_$BaseDeDatos, $UsuariosTable, Usuario>),
+          Usuario,
+          PrefetchHooks Function()
+        > {
+  $$UsuariosTableTableManager(_$BaseDeDatos db, $UsuariosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UsuariosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UsuariosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UsuariosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> nombre = const Value.absent(),
+                Value<String> rol = const Value.absent(),
+                Value<DateTime> creadoEn = const Value.absent(),
+              }) => UsuariosCompanion(
+                id: id,
+                nombre: nombre,
+                rol: rol,
+                creadoEn: creadoEn,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String nombre,
+                Value<String> rol = const Value.absent(),
+                required DateTime creadoEn,
+              }) => UsuariosCompanion.insert(
+                id: id,
+                nombre: nombre,
+                rol: rol,
+                creadoEn: creadoEn,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$UsuariosTable, Usuario>(table),
+                  BaseReferences<_$BaseDeDatos, $UsuariosTable, Usuario>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UsuariosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$BaseDeDatos,
+      $UsuariosTable,
+      Usuario,
+      $$UsuariosTableFilterComposer,
+      $$UsuariosTableOrderingComposer,
+      $$UsuariosTableAnnotationComposer,
+      $$UsuariosTableCreateCompanionBuilder,
+      $$UsuariosTableUpdateCompanionBuilder,
+      (Usuario, BaseReferences<_$BaseDeDatos, $UsuariosTable, Usuario>),
+      Usuario,
+      PrefetchHooks Function()
+    >;
 
 class $BaseDeDatosManager {
   final _$BaseDeDatos _db;
@@ -2901,4 +3378,6 @@ class $BaseDeDatosManager {
       $$GastosTableTableManager(_db, _db.gastos);
   $$FijosTableTableManager get fijos =>
       $$FijosTableTableManager(_db, _db.fijos);
+  $$UsuariosTableTableManager get usuarios =>
+      $$UsuariosTableTableManager(_db, _db.usuarios);
 }
