@@ -969,6 +969,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Modo oscuro'**
   String get modoOscuro;
+
+  /// No description provided for @dictarGasto.
+  ///
+  /// In es, this message translates to:
+  /// **'Dictar gasto'**
+  String get dictarGasto;
+
+  /// No description provided for @escuchandoTocaParaParar.
+  ///
+  /// In es, this message translates to:
+  /// **'Escuchando… toca para parar'**
+  String get escuchandoTocaParaParar;
+
+  /// No description provided for @escuche.
+  ///
+  /// In es, this message translates to:
+  /// **'Escuché'**
+  String get escuche;
+
+  /// No description provided for @dictadoAyuda.
+  ///
+  /// In es, this message translates to:
+  /// **'Di el gasto en una frase, por ejemplo: «Gasté cuarenta y cinco mil en mercado, en efectivo». Lo que se entienda se llena solo; tú lo revisas antes de guardar.'**
+  String get dictadoAyuda;
+
+  /// No description provided for @dictadoNoDisponible.
+  ///
+  /// In es, this message translates to:
+  /// **'El reconocimiento de voz no está disponible en este equipo.'**
+  String get dictadoNoDisponible;
+
+  /// No description provided for @dictadoTipWindows.
+  ///
+  /// In es, this message translates to:
+  /// **'En Windows también puedes dictar en cualquier campo tocándolo y oprimiendo Win + H.'**
+  String get dictadoTipWindows;
+
+  /// No description provided for @sinMontoEscuchado.
+  ///
+  /// In es, this message translates to:
+  /// **'No escuché el monto: escríbelo tú, por favor.'**
+  String get sinMontoEscuchado;
+
+  /// No description provided for @sinCategoriaEscuchada.
+  ///
+  /// In es, this message translates to:
+  /// **'No identifiqué la categoría: revisa la que quedó marcada.'**
+  String get sinCategoriaEscuchada;
 }
 
 class _AppLocalizationsDelegate

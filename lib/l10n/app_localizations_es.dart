@@ -484,4 +484,33 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get modoOscuro => 'Modo oscuro';
+
+  @override
+  String get dictarGasto => 'Dictar gasto';
+
+  @override
+  String get escuchandoTocaParaParar => 'Escuchando… toca para parar';
+
+  @override
+  String get escuche => 'Escuché';
+
+  @override
+  String get dictadoAyuda =>
+      'Di el gasto en una frase, por ejemplo: «Gasté cuarenta y cinco mil en mercado, en efectivo». Lo que se entienda se llena solo; tú lo revisas antes de guardar.';
+
+  @override
+  String get dictadoNoDisponible =>
+      'El reconocimiento de voz no está disponible en este equipo.';
+
+  @override
+  String get dictadoTipWindows =>
+      'En Windows también puedes dictar en cualquier campo tocándolo y oprimiendo Win + H.';
+
+  @override
+  String get sinMontoEscuchado =>
+      'No escuché el monto: escríbelo tú, por favor.';
+
+  @override
+  String get sinCategoriaEscuchada =>
+      'No identifiqué la categoría: revisa la que quedó marcada.';
 }

@@ -5,9 +5,12 @@
 /// vienen prellenados con lo más habitual).
 library;
 
+import 'dart:io' show Platform;
+
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../app/app.dart';
 import '../../core/base_de_datos/base_de_datos.dart';
@@ -16,6 +19,8 @@ import '../../core/providers.dart';
 import '../../core/utilidades/fechas.dart';
 import '../categorias/iconos_categoria.dart';
 import '../../core/ui/titulo_appbar.dart';
+import 'interprete_dictado.dart';
+import 'servicio_dictado.dart';
 
 class FormularioGasto extends ConsumerStatefulWidget {
   const FormularioGasto({super.key, this.gasto});
@@ -36,6 +41,14 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
   DateTime _fecha = DateTime.now();
   String? _error;
 
+  // Dictado por voz (v0.7.0): lo reconocido llena el formulario y la
+  // persona lo revisa antes de guardar. Nada se guarda solo.
+  final _dictado = ServicioDictado();
+  bool _escuchando = false;
+  String? _textoEscuchado;
+  ResultadoDictado? _ultimoDictado;
+  List<Categoria> _categorias = const [];
+
   @override
   void initState() {
     super.initState();
@@ -55,10 +68,144 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
 
   @override
   void dispose() {
+    _dictado.detener();
     _montoCtrl.dispose();
     _descripcionCtrl.dispose();
     _hechoPorCtrl.dispose();
     super.dispose();
+  }
+
+  /// Botón «Dictar gasto»: si ya está escuchando, detiene; si no,
+  /// prepara el reconocedor y empieza a escuchar.
+  Future<void> _alTocarDictado() async {
+    if (_escuchando) {
+      await _dictado.detener();
+      if (mounted) setState(() => _escuchando = false);
+      return;
+    }
+    final listo = await _dictado.preparar(
+      alError: (_) {
+        if (mounted) setState(() => _escuchando = false);
+      },
+      alEstado: (estado) {
+        if (!mounted) return;
+        if (estado == 'notListening' || estado == 'done') {
+          setState(() => _escuchando = false);
+        }
+      },
+    );
+    if (!mounted) return;
+    if (!listo) {
+      final textos = context.textos;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            Platform.isWindows
+                ? '${textos.dictadoNoDisponible} ${textos.dictadoTipWindows}'
+                : textos.dictadoNoDisponible,
+          ),
+        ),
+      );
+      return;
+    }
+    setState(() {
+      _escuchando = true;
+      _textoEscuchado = null;
+      _ultimoDictado = null;
+    });
+    try {
+      await _dictado.escuchar(
+        alResultado: (r) =>
+            _alResultadoDictado(r.recognizedWords, r.finalResult),
+      );
+    } catch (_) {
+      if (mounted) setState(() => _escuchando = false);
+    }
+  }
+
+  /// Cada resultado del reconocedor: los parciales solo muestran lo
+  /// que se va escuchando; el final se interpreta y llena el formulario.
+  void _alResultadoDictado(String texto, bool esFinal) {
+    if (!mounted) return;
+    if (!esFinal) {
+      setState(() => _textoEscuchado = texto);
+      return;
+    }
+    setState(() => _escuchando = false);
+    if (texto.trim().isEmpty) return;
+    _aplicarDictado(interpretarDictado(texto, _categorias));
+  }
+
+  /// Vuelca lo entendido en los campos. Lo no entendido NO se toca:
+  /// queda como estaba para que la persona lo complete a mano.
+  void _aplicarDictado(ResultadoDictado r) {
+    setState(() {
+      _textoEscuchado = r.textoOriginal;
+      _ultimoDictado = r;
+      if (r.montoPesos != null) _montoCtrl.text = r.montoPesos.toString();
+      if (r.categoria != null) _categoriaId = r.categoria!.id;
+      if (r.metodoPago != null) _metodoPago = r.metodoPago!;
+      if (r.fechaMencionada) _fecha = r.fecha;
+      if (r.descripcionSugerida != null &&
+          _descripcionCtrl.text.trim().isEmpty) {
+        _descripcionCtrl.text = r.descripcionSugerida!;
+      }
+      _error = null;
+    });
+  }
+
+  /// La tarjeta «Escuché»: muestra las palabras reconocidas y qué se
+  /// entendió (con ✔) y qué no (para revisarlo a mano).
+  Widget _tarjetaEscuchado(BuildContext context) {
+    final textos = context.textos;
+    final r = _ultimoDictado;
+    return Card(
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.hearing, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  '${textos.escuche}:',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text('«$_textoEscuchado»'),
+            if (r != null) ...[
+              const SizedBox(height: 8),
+              if (r.montoPesos != null)
+                Text(
+                  '✔ ${textos.monto}: '
+                  '${formatoMoneda(r.montoPesos!, monedaPorDefecto)}',
+                )
+              else
+                Text('• ${textos.sinMontoEscuchado}'),
+              if (r.categoria != null)
+                Text('✔ ${textos.categoria}: ${r.categoria!.nombre}')
+              else
+                Text('• ${textos.sinCategoriaEscuchada}'),
+              if (r.fechaMencionada)
+                Text('✔ ${textos.fecha}: ${fechaCorta(r.fecha)}'),
+              if (r.metodoPago != null)
+                Text(
+                  '✔ ${textos.metodoDePago}: ${r.metodoPago == 'efectivo'
+                      ? textos.efectivo
+                      : r.metodoPago == 'tarjeta'
+                      ? textos.tarjeta
+                      : textos.transferencia}',
+                ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _guardar() async {
@@ -148,6 +295,35 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (!soloLectura) ...[
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(56),
+                backgroundColor: _escuchando
+                    ? Theme.of(context).colorScheme.error
+                    : null,
+              ),
+              icon: Icon(_escuchando ? Icons.mic : Icons.mic_none, size: 26),
+              label: Text(
+                _escuchando
+                    ? textos.escuchandoTocaParaParar
+                    : textos.dictarGasto,
+              ),
+              onPressed: _alTocarDictado,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              textos.dictadoAyuda,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+          if (_textoEscuchado != null) ...[
+            _tarjetaEscuchado(context),
+            const SizedBox(height: 16),
+          ],
           TextField(
             controller: _montoCtrl,
             enabled: !soloLectura,
@@ -166,6 +342,7 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
           const SizedBox(height: 8),
           categoriasAsync.when(
             data: (categorias) {
+              _categorias = categorias;
               if (_categoriaId == null && categorias.isNotEmpty) {
                 _categoriaId = categorias.first.id;
               }

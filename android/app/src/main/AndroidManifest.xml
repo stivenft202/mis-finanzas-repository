@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <!-- Micrófono para dictar gastos por voz (v0.7.0). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:label="finanzas_hogar"
         android:name="${applicationName}"
@@ -42,6 +44,10 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Servicio de reconocimiento de voz del equipo (dictado, v0.7.0). -->
+        <intent>
+            <action android:name="android.speech.RecognitionService"/>
         </intent>
     </queries>
 </manifest>

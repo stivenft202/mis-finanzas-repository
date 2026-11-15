@@ -3,6 +3,11 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.7.0] - 2026-11-15
+
+### Agregado
+- **Dictado de gastos por voz** (fase adelantada): dentro de «Agregar gasto», el botón «Dictar gasto» usa el reconocedor de voz del equipo (en Android, el que el celular ya trae; sin cuentas ni pagos) y entiende frases como «Gasté cuarenta y cinco mil en mercado, en efectivo»: llena solo el monto (en palabras o en dígitos), la categoría (por su nombre o por palabras conocidas como gasolina, farmacia o colegio), la fecha si se dice «ayer» o «anteayer» y el método si se dice «en efectivo», «con tarjeta» o «por transferencia». Nada se guarda sin revisión: la tarjeta «Escuché» muestra las palabras reconocidas, lo entendido con ✔ y lo que no se entendió, y la persona corrige lo que haga falta y toca Guardar. Lo que no se entiende, no se inventa.
+
 ## [0.6.3] - 2026-11-15
 
 ### Corregido
