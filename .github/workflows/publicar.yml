@@ -86,7 +86,17 @@ jobs:
           LLAVE_ANDROID_CLAVE: ${{ secrets.LLAVE_ANDROID_CLAVE }}
           LLAVE_ANDROID_ALIAS: ${{ secrets.LLAVE_ANDROID_ALIAS }}
         run: |
-          echo "$LLAVE_ANDROID_BASE64" | base64 --decode > android/finanzas-release.jks
+          echo "$LLAVE_ANDROID_BASE64" | base64 --decode > android/llave-original.bin
+          if keytool -importkeystore -noprompt -srckeystore android/llave-original.bin -srcstoretype JKS -srcstorepass "$LLAVE_ANDROID_CLAVE" -destkeystore android/finanzas-release.jks -deststoretype JKS -deststorepass "$LLAVE_ANDROID_CLAVE" -destkeypass "$LLAVE_ANDROID_CLAVE"; then
+            echo "Llave pasada al formato clasico (JKS)."
+          else
+            rm -f android/finanzas-release.jks
+            keytool -importkeystore -noprompt -srckeystore android/llave-original.bin -srcstoretype PKCS12 -srcstorepass "$LLAVE_ANDROID_CLAVE" -destkeystore android/finanzas-release.jks -deststoretype JKS -deststorepass "$LLAVE_ANDROID_CLAVE" -destkeypass "$LLAVE_ANDROID_CLAVE"
+            echo "Llave pasada al formato clasico (JKS) desde el formato moderno."
+          fi
+          rm -f android/llave-original.bin
+          echo "Huella de la llave que firmara el APK:"
+          keytool -list -v -keystore android/finanzas-release.jks -storepass "$LLAVE_ANDROID_CLAVE" | grep "SHA256:" || true
           {
             echo "storePassword=$LLAVE_ANDROID_CLAVE"
             echo "keyPassword=$LLAVE_ANDROID_CLAVE"
