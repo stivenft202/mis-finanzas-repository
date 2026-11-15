@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/app.dart';
 import 'servicio_actualizacion.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaActualizacion extends ConsumerStatefulWidget {
   const PantallaActualizacion({super.key});
@@ -129,7 +130,7 @@ class _PantallaActualizacionState extends ConsumerState<PantallaActualizacion> {
     final esquema = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text(textos.actualizacion)),
+      appBar: AppBar(title: TituloAppBar(textos.actualizacion)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -153,9 +154,9 @@ class _PantallaActualizacionState extends ConsumerState<PantallaActualizacion> {
                     Text(
                       textos.hayVersionNueva(info.version),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: esquema.onPrimaryContainer,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: esquema.onPrimaryContainer,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     FilledButton.icon(
@@ -184,7 +185,9 @@ class _PantallaActualizacionState extends ConsumerState<PantallaActualizacion> {
             ),
             icon: const Icon(Icons.refresh, size: 26),
             label: Text(
-              _buscando ? textos.buscandoActualizacion : textos.buscarActualizacion,
+              _buscando
+                  ? textos.buscandoActualizacion
+                  : textos.buscarActualizacion,
             ),
             onPressed: (_buscando || _descargando) ? null : _buscar,
           ),

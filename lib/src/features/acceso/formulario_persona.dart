@@ -8,6 +8,7 @@ import '../../app/app.dart';
 import '../../core/providers.dart';
 import '../../core/seguridad/autenticacion.dart';
 import 'roles_ui.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class FormularioPersona extends ConsumerStatefulWidget {
   const FormularioPersona({super.key});
@@ -52,16 +53,17 @@ class _Estado extends ConsumerState<FormularioPersona> {
       _error = null;
     });
     try {
-      await ref.read(servicioAutenticacionProvider).crearPersona(
+      await ref
+          .read(servicioAutenticacionProvider)
+          .crearPersona(
             nombre: nombre,
             rol: _rol,
             clave: _clave.text,
             pin: _pin.text,
           );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(textos.personaCreada)),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(textos.personaCreada)));
         Navigator.of(context).pop();
       }
     } on ArgumentError catch (e) {
@@ -76,7 +78,7 @@ class _Estado extends ConsumerState<FormularioPersona> {
   Widget build(BuildContext context) {
     final textos = context.textos;
     return Scaffold(
-      appBar: AppBar(title: Text(textos.agregarPersona)),
+      appBar: AppBar(title: TituloAppBar(textos.agregarPersona)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -102,8 +104,7 @@ class _Estado extends ConsumerState<FormularioPersona> {
                   child: Text(nombreRol(context, rol)),
                 ),
             ],
-            onChanged: (valor) =>
-                setState(() => _rol = valor ?? Roles.miembro),
+            onChanged: (valor) => setState(() => _rol = valor ?? Roles.miembro),
           ),
           const SizedBox(height: 16),
           TextField(
@@ -137,7 +138,8 @@ class _Estado extends ConsumerState<FormularioPersona> {
           const SizedBox(height: 24),
           FilledButton.icon(
             style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(60)),
+              minimumSize: const Size.fromHeight(60),
+            ),
             icon: const Icon(Icons.person_add, size: 26),
             label: Text(textos.guardar),
             onPressed: _guardando ? null : _guardar,

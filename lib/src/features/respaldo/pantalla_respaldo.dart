@@ -17,6 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/app.dart';
 import '../../core/providers.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaRespaldo extends ConsumerStatefulWidget {
   const PantallaRespaldo({super.key});
@@ -51,14 +52,12 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
         await File(ruta).writeAsBytes(bytes);
       }
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(textos.exportarListo)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(textos.exportarListo)));
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(textos.errorRespaldo)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(textos.errorRespaldo)));
     } finally {
       if (mounted) setState(() => _trabajando = false);
     }
@@ -122,19 +121,16 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
       final base = ref.read(baseDeDatosProvider);
       await base.importarDatos(datos);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(textos.importarListo)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(textos.importarListo)));
     } on FormatException {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(textos.archivoNoValido)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(textos.archivoNoValido)));
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(textos.archivoNoValido)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(textos.archivoNoValido)));
     } finally {
       if (mounted) setState(() => _trabajando = false);
     }
@@ -145,7 +141,7 @@ class _PantallaRespaldoState extends ConsumerState<PantallaRespaldo> {
     final textos = context.textos;
     final esAdmin = ref.watch(puedeAdministrarProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(textos.respaldo)),
+      appBar: AppBar(title: TituloAppBar(textos.respaldo)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

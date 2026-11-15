@@ -10,6 +10,7 @@ import '../../app/app.dart';
 import '../../core/base_de_datos/base_de_datos.dart';
 import '../../core/providers.dart';
 import 'iconos_categoria.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class FormularioCategoria extends ConsumerStatefulWidget {
   const FormularioCategoria({super.key, this.categoria});
@@ -84,9 +85,11 @@ class _FormularioCategoriaState extends ConsumerState<FormularioCategoria> {
     final textos = context.textos;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.categoria == null
-            ? textos.nuevaCategoria
-            : '${textos.editar} · ${textos.categorias}'),
+        title: TituloAppBar(
+          widget.categoria == null
+              ? textos.nuevaCategoria
+              : '${textos.editar} · ${textos.categorias}',
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -96,8 +99,10 @@ class _FormularioCategoriaState extends ConsumerState<FormularioCategoria> {
             decoration: InputDecoration(labelText: textos.nombreCategoria),
           ),
           const SizedBox(height: 20),
-          Text(textos.categoria,
-              style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            textos.categoria,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 10,
@@ -132,8 +137,7 @@ class _FormularioCategoriaState extends ConsumerState<FormularioCategoria> {
           const SizedBox(height: 20),
           TextField(
             controller: _tipoCtrl,
-            decoration:
-                InputDecoration(labelText: textos.tipoFacturaOpcional),
+            decoration: InputDecoration(labelText: textos.tipoFacturaOpcional),
           ),
           const SizedBox(height: 8),
           SwitchListTile(
@@ -144,7 +148,8 @@ class _FormularioCategoriaState extends ConsumerState<FormularioCategoria> {
           const SizedBox(height: 24),
           FilledButton.icon(
             style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(64)),
+              minimumSize: const Size.fromHeight(64),
+            ),
             icon: const Icon(Icons.save, size: 26),
             label: Text(textos.guardar),
             onPressed: _guardar,

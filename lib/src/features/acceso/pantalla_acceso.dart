@@ -11,6 +11,7 @@ import '../../core/base_de_datos/base_de_datos.dart';
 import '../../core/providers.dart';
 import '../../core/seguridad/autenticacion.dart';
 import 'roles_ui.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaAcceso extends ConsumerStatefulWidget {
   const PantallaAcceso({super.key});
@@ -108,7 +109,7 @@ class _Estado extends ConsumerState<PantallaAcceso> {
         : null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(textos.tituloApp)),
+      appBar: AppBar(title: TituloAppBar(textos.tituloApp)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -128,8 +129,7 @@ class _Estado extends ConsumerState<PantallaAcceso> {
             TextButton.icon(
               icon: const Icon(Icons.swap_horiz),
               label: Text(textos.cambiarDeUsuario),
-              onPressed: () =>
-                  ref.read(controlAccesoProvider.notifier).salir(),
+              onPressed: () => ref.read(controlAccesoProvider.notifier).salir(),
             ),
           ] else ...[
             Text(
@@ -190,8 +190,11 @@ class _Estado extends ConsumerState<PantallaAcceso> {
     );
   }
 
-  Widget _formulario(BuildContext context, Usuario usuario,
-      {required bool soloPin}) {
+  Widget _formulario(
+    BuildContext context,
+    Usuario usuario, {
+    required bool soloPin,
+  }) {
     final textos = context.textos;
     final bloqueado = _restante != null;
     return Column(
@@ -231,8 +234,7 @@ class _Estado extends ConsumerState<PantallaAcceso> {
         ],
         const SizedBox(height: 16),
         FilledButton.icon(
-          style:
-              FilledButton.styleFrom(minimumSize: const Size.fromHeight(60)),
+          style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(60)),
           icon: const Icon(Icons.login, size: 26),
           label: Text(textos.entrar),
           onPressed: (_entrando || bloqueado) ? null : () => _intentar(usuario),

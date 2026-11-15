@@ -12,6 +12,7 @@ import '../../core/base_de_datos/base_de_datos.dart';
 import '../../core/providers.dart';
 import 'formulario_categoria.dart';
 import 'iconos_categoria.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaCategorias extends ConsumerWidget {
   const PantallaCategorias({super.key});
@@ -69,7 +70,7 @@ class PantallaCategorias extends ConsumerWidget {
     final editable = ref.watch(puedeEditarProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(textos.categorias)),
+      appBar: AppBar(title: TituloAppBar(textos.categorias)),
       floatingActionButton: editable
           ? FloatingActionButton.extended(
               icon: const Icon(Icons.add),
@@ -104,40 +105,43 @@ class PantallaCategorias extends ConsumerWidget {
               trailing: !editable
                   ? null
                   : PopupMenuButton<String>(
-                onSelected: (accion) async {
-                  final base = ref.read(baseDeDatosProvider);
-                  switch (accion) {
-                    case 'editar':
-                      if (!context.mounted) return;
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => FormularioCategoria(categoria: c),
+                      onSelected: (accion) async {
+                        final base = ref.read(baseDeDatosProvider);
+                        switch (accion) {
+                          case 'editar':
+                            if (!context.mounted) return;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    FormularioCategoria(categoria: c),
+                              ),
+                            );
+                          case 'ocultar':
+                            await base.actualizarCategoria(
+                              c.copyWith(oculta: !c.oculta),
+                            );
+                          case 'eliminar':
+                            if (!context.mounted) return;
+                            await _eliminar(context, ref, c);
+                        }
+                      },
+                      itemBuilder: (ctx) => [
+                        PopupMenuItem(
+                          value: 'editar',
+                          child: Text(textos.editar),
                         ),
-                      );
-                    case 'ocultar':
-                      await base.actualizarCategoria(
-                        c.copyWith(oculta: !c.oculta),
-                      );
-                    case 'eliminar':
-                      if (!context.mounted) return;
-                      await _eliminar(context, ref, c);
-                  }
-                },
-                itemBuilder: (ctx) => [
-                  PopupMenuItem(
-                    value: 'editar',
-                    child: Text(textos.editar),
-                  ),
-                  PopupMenuItem(
-                    value: 'ocultar',
-                    child: Text(c.oculta ? textos.mostrar : textos.ocultar),
-                  ),
-                  PopupMenuItem(
-                    value: 'eliminar',
-                    child: Text(textos.eliminar),
-                  ),
-                ],
-              ),
+                        PopupMenuItem(
+                          value: 'ocultar',
+                          child: Text(
+                            c.oculta ? textos.mostrar : textos.ocultar,
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'eliminar',
+                          child: Text(textos.eliminar),
+                        ),
+                      ],
+                    ),
             );
           },
         ),

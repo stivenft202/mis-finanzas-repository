@@ -12,6 +12,7 @@ import '../../core/providers.dart';
 import '../../core/seguridad/autenticacion.dart';
 import 'formulario_persona.dart';
 import 'roles_ui.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaUsuarios extends ConsumerStatefulWidget {
   const PantallaUsuarios({super.key});
@@ -140,8 +141,10 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: Text(persona.nombre,
-                  style: Theme.of(ctx).textTheme.titleLarge),
+              title: Text(
+                persona.nombre,
+                style: Theme.of(ctx).textTheme.titleLarge,
+              ),
               subtitle: Text(nombreRol(ctx, persona.rol)),
             ),
             ListTile(
@@ -160,10 +163,14 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
               onTap: () => Navigator.of(ctx).pop('pin'),
             ),
             ListTile(
-              leading: Icon(Icons.delete,
-                  color: Theme.of(ctx).colorScheme.error),
-              title: Text(textos.eliminar,
-                  style: TextStyle(color: Theme.of(ctx).colorScheme.error)),
+              leading: Icon(
+                Icons.delete,
+                color: Theme.of(ctx).colorScheme.error,
+              ),
+              title: Text(
+                textos.eliminar,
+                style: TextStyle(color: Theme.of(ctx).colorScheme.error),
+              ),
               onTap: () => Navigator.of(ctx).pop('eliminar'),
             ),
           ],
@@ -265,12 +272,14 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
     final autoBloqueo = ref.watch(autoBloqueoMinutosProvider).value ?? 5;
 
     return Scaffold(
-      appBar: AppBar(title: Text(textos.usuarios)),
+      appBar: AppBar(title: TituloAppBar(textos.usuarios)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(textos.miSeguridad,
-              style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            textos.miSeguridad,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
           if (yo != null)
             Card(
@@ -303,8 +312,7 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
                             Expanded(
                               child: Text(
                                 textos.bloqueoAutomatico,
-                                style:
-                                    Theme.of(context).textTheme.titleMedium,
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                           ],
@@ -314,17 +322,25 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
                           isExpanded: true,
                           initialValue:
                               const [0, 1, 5, 15].contains(autoBloqueo)
-                                  ? autoBloqueo
-                                  : 5,
+                              ? autoBloqueo
+                              : 5,
                           items: [
                             DropdownMenuItem(
-                                value: 0, child: Text(textos.bloqueoNunca)),
+                              value: 0,
+                              child: Text(textos.bloqueoNunca),
+                            ),
                             DropdownMenuItem(
-                                value: 1, child: Text(textos.bloqueoTras1)),
+                              value: 1,
+                              child: Text(textos.bloqueoTras1),
+                            ),
                             DropdownMenuItem(
-                                value: 5, child: Text(textos.bloqueoTras5)),
+                              value: 5,
+                              child: Text(textos.bloqueoTras5),
+                            ),
                             DropdownMenuItem(
-                                value: 15, child: Text(textos.bloqueoTras15)),
+                              value: 15,
+                              child: Text(textos.bloqueoTras15),
+                            ),
                           ],
                           onChanged: (valor) {
                             if (valor != null) _cambiarAutoBloqueo(valor);
@@ -338,8 +354,10 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
             ),
           if (esAdmin && yo != null) ...[
             const SizedBox(height: 24),
-            Text(textos.personasDelHogar,
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              textos.personasDelHogar,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             for (final persona in usuarios)
               Card(
@@ -360,7 +378,8 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
             const SizedBox(height: 12),
             FilledButton.icon(
               style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(56)),
+                minimumSize: const Size.fromHeight(56),
+              ),
               icon: const Icon(Icons.person_add),
               label: Text(textos.agregarPersona),
               onPressed: () => Navigator.of(context).push(

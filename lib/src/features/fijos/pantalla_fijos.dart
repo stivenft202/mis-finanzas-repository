@@ -16,6 +16,7 @@ import '../../core/base_de_datos/base_de_datos.dart';
 import '../../core/monedas/monedas.dart';
 import '../../core/providers.dart';
 import 'formulario_fijo.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 /// Suma de los montos de una lista de fijos.
 int totalDeFijos(List<Fijo> fijos) =>
@@ -45,7 +46,9 @@ class PantallaFijos extends ConsumerWidget {
           label: textos.deshacer,
           onPressed: () async {
             final ahora = DateTime.now();
-            await ref.read(baseDeDatosProvider).crearFijo(
+            await ref
+                .read(baseDeDatosProvider)
+                .crearFijo(
                   FijosCompanion.insert(
                     tipo: borrado.tipo,
                     nombre: borrado.nombre,
@@ -70,7 +73,7 @@ class PantallaFijos extends ConsumerWidget {
     final ingresosAsync = ref.watch(ingresosFijosProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(textos.fijosDelMes)),
+      appBar: AppBar(title: TituloAppBar(textos.fijosDelMes)),
       body: gastosAsync.when(
         data: (gastos) => ingresosAsync.when(
           data: (ingresos) => _contenido(context, ref, gastos, ingresos),
@@ -105,14 +108,15 @@ class PantallaFijos extends ConsumerWidget {
           textoTotal: textos.totalGastos,
           onTocar: editable
               ? (fijo) =>
-                  _abrirFormulario(context, ref, tipo: 'gasto', fijo: fijo)
+                    _abrirFormulario(context, ref, tipo: 'gasto', fijo: fijo)
               : null,
         ),
         if (editable) ...[
           const SizedBox(height: 12),
           FilledButton.icon(
-            style:
-                FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(56),
+            ),
             icon: const Icon(Icons.add_circle, size: 26),
             label: Text(textos.agregarGastoFijo),
             onPressed: () => _abrirFormulario(context, ref, tipo: 'gasto'),
@@ -127,14 +131,15 @@ class PantallaFijos extends ConsumerWidget {
           textoTotal: textos.totalIngresos,
           onTocar: editable
               ? (fijo) =>
-                  _abrirFormulario(context, ref, tipo: 'ingreso', fijo: fijo)
+                    _abrirFormulario(context, ref, tipo: 'ingreso', fijo: fijo)
               : null,
         ),
         if (editable) ...[
           const SizedBox(height: 12),
           FilledButton.icon(
-            style:
-                FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(56),
+            ),
             icon: const Icon(Icons.add_circle, size: 26),
             label: Text(textos.agregarIngresoFijo),
             onPressed: () => _abrirFormulario(context, ref, tipo: 'ingreso'),
@@ -172,9 +177,9 @@ class _TablaFijos extends StatelessWidget {
     final textos = context.textos;
     final esquema = Theme.of(context).colorScheme;
     final estiloEncabezado = Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: esquema.onSurfaceVariant,
-        );
+      fontWeight: FontWeight.bold,
+      color: esquema.onSurfaceVariant,
+    );
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -185,45 +190,54 @@ class _TablaFijos extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Text(
               encabezado,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                  ),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.5),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
-                Expanded(flex: 3, child: Text(columnaNombre, style: estiloEncabezado)),
-                Expanded(flex: 3, child: Text(textos.descripcionCorta, style: estiloEncabezado)),
                 Expanded(
-                  flex: 2,
-                  child: Text(textos.valor,
-                      style: estiloEncabezado, textAlign: TextAlign.right),
+                  flex: 3,
+                  child: Text(columnaNombre, style: estiloEncabezado),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(textos.descripcionCorta, style: estiloEncabezado),
                 ),
                 Expanded(
                   flex: 2,
-                  child: Text(textos.fechaRecurrente,
-                      style: estiloEncabezado, textAlign: TextAlign.right),
+                  child: Text(
+                    textos.valor,
+                    style: estiloEncabezado,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    textos.fechaRecurrente,
+                    style: estiloEncabezado,
+                    textAlign: TextAlign.right,
+                  ),
                 ),
               ],
             ),
           ),
           const Divider(height: 1),
           if (fijos.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(textoVacio),
-            )
+            Padding(padding: const EdgeInsets.all(16), child: Text(textoVacio))
           else
             for (var i = 0; i < fijos.length; i++) ...[
               if (i > 0) const Divider(height: 1),
               InkWell(
                 onTap: onTocar == null ? null : () => onTocar!(fijos[i]),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
                   child: Row(
                     children: [
                       Expanded(
@@ -271,16 +285,14 @@ class _TablaFijos extends StatelessWidget {
                 Expanded(
                   child: Text(
                     textoTotal,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Text(
                   formatoMoneda(totalDeFijos(fijos), monedaPorDefecto),
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -303,8 +315,9 @@ class _Resultado extends StatelessWidget {
     final textos = context.textos;
     final sobra = resultado >= 0;
     final color = sobra ? const Color(0xFF2E7D32) : const Color(0xFFC62828);
-    final leyenda =
-        resultado == 0 ? textos.enCero : (sobra ? textos.teSobra : textos.teFalta);
+    final leyenda = resultado == 0
+        ? textos.enCero
+        : (sobra ? textos.teSobra : textos.teFalta);
     return Card(
       color: color,
       child: Padding(
@@ -314,18 +327,16 @@ class _Resultado extends StatelessWidget {
             Text(
               textos.utilidadDeuda,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1,
-                  ),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               formatoMoneda(resultado, monedaPorDefecto),
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context).textTheme.headlineLarge
+                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
             Text(

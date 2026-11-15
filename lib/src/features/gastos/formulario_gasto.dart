@@ -15,6 +15,7 @@ import '../../core/monedas/monedas.dart';
 import '../../core/providers.dart';
 import '../../core/utilidades/fechas.dart';
 import '../categorias/iconos_categoria.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class FormularioGasto extends ConsumerStatefulWidget {
   const FormularioGasto({super.key, this.gasto});
@@ -76,8 +77,9 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
     }
     final base = ref.read(baseDeDatosProvider);
     final ahora = DateTime.now();
-    final hechoPor =
-        _hechoPorCtrl.text.trim().isEmpty ? 'Yo' : _hechoPorCtrl.text.trim();
+    final hechoPor = _hechoPorCtrl.text.trim().isEmpty
+        ? 'Yo'
+        : _hechoPorCtrl.text.trim();
     final existente = widget.gasto;
     if (existente == null) {
       await base.crearGasto(
@@ -109,9 +111,8 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
       );
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(textos.gastoGuardado)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(textos.gastoGuardado)));
     Navigator.of(context).pop();
   }
 
@@ -138,9 +139,11 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.gasto == null
-            ? textos.agregarGasto
-            : '${textos.editar} · ${textos.agregarGasto}'),
+        title: TituloAppBar(
+          widget.gasto == null
+              ? textos.agregarGasto
+              : '${textos.editar} · ${textos.agregarGasto}',
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -148,8 +151,7 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
           TextField(
             controller: _montoCtrl,
             enabled: !soloLectura,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: Theme.of(context).textTheme.headlineLarge,
             decoration: InputDecoration(
               labelText: '${textos.monto} (${monedaPorDefecto})',
@@ -157,7 +159,10 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
             ),
           ),
           const SizedBox(height: 20),
-          Text(textos.categoria, style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            textos.categoria,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           categoriasAsync.when(
             data: (categorias) {
@@ -172,8 +177,11 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
                     ChoiceChip(
                       avatar: CircleAvatar(
                         backgroundColor: Color(c.colorValor),
-                        child: Icon(iconoDeCategoria(c.icono),
-                            size: 16, color: Colors.white),
+                        child: Icon(
+                          iconoDeCategoria(c.icono),
+                          size: 16,
+                          color: Colors.white,
+                        ),
                       ),
                       label: Text(c.nombre),
                       selected: _categoriaId == c.id,
@@ -211,21 +219,23 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
                   onPressed: soloLectura
                       ? null
                       : () async {
-                    final elegida = await showDatePicker(
-                      context: context,
-                      initialDate: _fecha,
-                      firstDate: DateTime(2020),
-                      lastDate: DateTime(2100),
-                    );
-                    if (elegida != null) setState(() => _fecha = elegida);
-                  },
+                          final elegida = await showDatePicker(
+                            context: context,
+                            initialDate: _fecha,
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2100),
+                          );
+                          if (elegida != null) setState(() => _fecha = elegida);
+                        },
                 ),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          Text(textos.metodoDePago,
-              style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            textos.metodoDePago,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -256,7 +266,8 @@ class _FormularioGastoState extends ConsumerState<FormularioGasto> {
           else
             FilledButton.icon(
               style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(64)),
+                minimumSize: const Size.fromHeight(64),
+              ),
               icon: const Icon(Icons.save, size: 26),
               label: Text(textos.guardar),
               onPressed: _guardar,

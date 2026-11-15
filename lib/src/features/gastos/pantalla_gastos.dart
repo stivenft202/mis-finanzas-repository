@@ -12,6 +12,7 @@ import '../../core/monedas/monedas.dart';
 import '../../core/providers.dart';
 import '../../core/utilidades/fechas.dart';
 import 'pantalla_inicio.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaGastos extends ConsumerWidget {
   const PantallaGastos({super.key});
@@ -82,7 +83,7 @@ class PantallaGastos extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${textos.verGastos} · ${nombreDelMes(mes)}'),
+        title: TituloAppBar('${textos.verGastos} · ${nombreDelMes(mes)}'),
       ),
       body: Column(
         children: [
@@ -133,8 +134,7 @@ class PantallaGastos extends ConsumerWidget {
                   },
                 );
               },
-              loading: () =>
-                  const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => Center(child: Text(textos.sinGastosEsteMes)),
             ),
           ),

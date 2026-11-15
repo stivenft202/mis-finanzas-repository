@@ -13,6 +13,7 @@ import '../../app/app.dart';
 import '../../core/base_de_datos/base_de_datos.dart';
 import '../../core/monedas/monedas.dart';
 import '../../core/providers.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class FormularioFijo extends ConsumerStatefulWidget {
   const FormularioFijo({super.key, required this.tipo, this.fijo});
@@ -99,9 +100,8 @@ class _FormularioFijoState extends ConsumerState<FormularioFijo> {
       );
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(textos.fijoGuardado)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(textos.fijoGuardado)));
     Navigator.of(context).pop();
   }
 
@@ -136,12 +136,14 @@ class _FormularioFijoState extends ConsumerState<FormularioFijo> {
   @override
   Widget build(BuildContext context) {
     final textos = context.textos;
-    final tituloNuevo = _esGasto ? textos.agregarGastoFijo : textos.agregarIngresoFijo;
+    final tituloNuevo = _esGasto
+        ? textos.agregarGastoFijo
+        : textos.agregarIngresoFijo;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.fijo == null
-            ? tituloNuevo
-            : '${textos.editar} · $tituloNuevo'),
+        title: TituloAppBar(
+          widget.fijo == null ? tituloNuevo : '${textos.editar} · $tituloNuevo',
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -161,8 +163,7 @@ class _FormularioFijoState extends ConsumerState<FormularioFijo> {
           const SizedBox(height: 16),
           TextField(
             controller: _montoCtrl,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: Theme.of(context).textTheme.headlineLarge,
             decoration: InputDecoration(
               labelText: '${textos.valor} (${monedaPorDefecto})',
@@ -194,7 +195,8 @@ class _FormularioFijoState extends ConsumerState<FormularioFijo> {
           const SizedBox(height: 28),
           FilledButton.icon(
             style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(64)),
+              minimumSize: const Size.fromHeight(64),
+            ),
             icon: const Icon(Icons.save, size: 26),
             label: Text(textos.guardar),
             onPressed: _guardar,

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/app.dart';
 import '../../core/providers.dart';
 import '../../core/seguridad/autenticacion.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaPrimerUso extends ConsumerStatefulWidget {
   const PantallaPrimerUso({super.key});
@@ -79,7 +80,7 @@ class _Estado extends ConsumerState<PantallaPrimerUso> {
   Widget build(BuildContext context) {
     final textos = context.textos;
     return Scaffold(
-      appBar: AppBar(title: Text(textos.tituloApp)),
+      appBar: AppBar(title: TituloAppBar(textos.tituloApp)),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -153,7 +154,8 @@ class _Estado extends ConsumerState<PantallaPrimerUso> {
           const SizedBox(height: 24),
           FilledButton.icon(
             style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(60)),
+              minimumSize: const Size.fromHeight(60),
+            ),
             icon: const Icon(Icons.check_circle, size: 26),
             label: Text(textos.crearMiUsuario),
             onPressed: _creando ? null : _crear,

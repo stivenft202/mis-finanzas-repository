@@ -3,6 +3,12 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.6.3] - 2026-11-15
+
+### Corregido
+- En Android, la fila de un gasto apretaba el texto contra el monto y los nombres largos se partían feo («Imprevistos y reparacione / s» en el inicio y en «Ver gastos»). La fila se rehízo: el texto tiene su espacio asegurado, pasa a dos líneas cortando por palabras y el monto se encoge un poco si hace falta, sin cortarse nunca.
+- Los títulos de las barras superiores ya no salen cortados con «…» («Finan…», «Ver gastos · noviembr…»): ahora se encogen lo justo para leerse completos en todas las pantallas.
+
 ## [0.6.2] - 2026-11-14
 
 ### Corregido

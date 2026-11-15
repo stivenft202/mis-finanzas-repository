@@ -1,10 +1,14 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:finanzas_hogar/l10n/app_localizations.dart';
 import 'package:finanzas_hogar/src/app/app.dart';
 import 'package:finanzas_hogar/src/core/base_de_datos/base_de_datos.dart';
 import 'package:finanzas_hogar/src/core/providers.dart';
 import 'package:finanzas_hogar/src/core/seguridad/autenticacion.dart';
+import 'package:finanzas_hogar/src/core/monedas/monedas.dart';
+import 'package:finanzas_hogar/src/core/ui/titulo_appbar.dart';
 import 'package:finanzas_hogar/src/features/acceso/pantalla_usuarios.dart';
+import 'package:finanzas_hogar/src/features/gastos/pantalla_inicio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -119,5 +123,102 @@ void main() {
     await tester.runAsync(() async {
       await base.close();
     });
+  });
+
+  testWidgets(
+      'la fila de un gasto con nombre largo no se aprieta en el celular',
+      (tester) async {
+    // El celular de Esteban: 720x1600 a doble densidad = 360 de ancho.
+    tester.view.physicalSize = const Size(720, 1600);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.reset);
+
+    final base = BaseDeDatos(NativeDatabase.memory());
+    late Gasto gasto;
+    late Categoria categoria;
+    await tester.runAsync(() async {
+      final categoriaId = await base.into(base.categorias).insert(
+            CategoriasCompanion.insert(
+              nombre: 'Imprevistos y reparaciones',
+              colorValor: 0xFF455A64,
+              icono: const Value('imprevistos'),
+            ),
+          );
+      categoria = await (base.select(base.categorias)
+            ..where((c) => c.id.equals(categoriaId)))
+          .getSingle();
+      final ahora = DateTime(2026, 11, 14);
+      final gastoId = await base.into(base.gastos).insert(
+            GastosCompanion.insert(
+              montoMenor: 10000,
+              montoBaseMenor: 10000,
+              fecha: ahora,
+              categoriaId: categoriaId,
+              descripcion: const Value('Imprevistos y reparaciones'),
+              creadoEn: ahora,
+              actualizadoEn: ahora,
+            ),
+          );
+      gasto = await (base.select(base.gastos)
+            ..where((g) => g.id.equals(gastoId)))
+          .getSingle();
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('es'),
+        home: Scaffold(
+          body: TileGasto(gasto: gasto, categorias: [categoria]),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Imprevistos y reparaciones'), findsOneWidget);
+    // Con el ListTile viejo el título quedaba en ~110 de ancho y la
+    // palabra «reparaciones» se partía en dos; ahora debe pasar de 150.
+    expect(
+      tester.getSize(find.text('Imprevistos y reparaciones')).width,
+      greaterThan(150),
+    );
+    // El formato real lo da formatoMoneda (con su espacio especial
+    // entre el número y el $): se compara contra la función misma.
+    expect(find.text(formatoMoneda(10000, 'COP')), findsOneWidget);
+
+    await tester.runAsync(() async {
+      await base.close();
+    });
+  });
+
+  testWidgets('el título largo de una barra superior no se corta',
+      (tester) async {
+    // El celular de Esteban: 720x1600 a doble densidad = 360 de ancho.
+    tester.view.physicalSize = const Size(720, 1600);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('es'),
+        home: Scaffold(
+          appBar: AppBar(
+            leading: const BackButton(),
+            title: const TituloAppBar('Ver gastos · noviembre 2026'),
+          ),
+          body: const SizedBox.shrink(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    // El texto completo está, sin el «…» que salía en la v0.6.2.
+    expect(find.text('Ver gastos · noviembre 2026'), findsOneWidget);
+    expect(find.textContaining('…'), findsNothing);
   });
 }

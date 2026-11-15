@@ -27,14 +27,14 @@ import '../fijos/pantalla_fijos.dart';
 import '../respaldo/pantalla_respaldo.dart';
 import 'formulario_gasto.dart';
 import 'pantalla_gastos.dart';
+import '../../core/ui/titulo_appbar.dart';
 
 class PantallaInicio extends ConsumerWidget {
   const PantallaInicio({super.key});
 
   void _abrirActualizacion(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const PantallaActualizacion()),
-    );
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => const PantallaActualizacion()));
   }
 
   @override
@@ -49,12 +49,13 @@ class PantallaInicio extends ConsumerWidget {
     final editable = ref.watch(puedeEditarProvider);
     final modoTema = ref.watch(modoTemaProvider);
     final brilloSistema = MediaQuery.platformBrightnessOf(context);
-    final esOscuro = modoTema == ThemeMode.dark ||
+    final esOscuro =
+        modoTema == ThemeMode.dark ||
         (modoTema == ThemeMode.system && brilloSistema == Brightness.dark);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(textos.tituloApp, overflow: TextOverflow.ellipsis),
+        title: TituloAppBar(textos.tituloApp),
         actions: [
           IconButton(
             icon: const Icon(Icons.light_mode),
@@ -148,8 +149,9 @@ class PantallaInicio extends ConsumerWidget {
                       child: Text(
                         '${textos.hayActualizacionCorta}: ${actualizacion.version}',
                         style: TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onPrimaryContainer,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -219,8 +221,8 @@ class PantallaInicio extends ConsumerWidget {
             alto: 74,
             onPressed: editable
                 ? () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const FormularioGasto()),
-                    )
+                    MaterialPageRoute(builder: (_) => const FormularioGasto()),
+                  )
                 : null,
           ),
           const SizedBox(height: 12),
@@ -244,7 +246,8 @@ class PantallaInicio extends ConsumerWidget {
                   colores: const [Color(0xFF6A1B9A), Color(0xFFAB47BC)],
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (_) => const PantallaCategorias()),
+                      builder: (_) => const PantallaCategorias(),
+                    ),
                   ),
                 ),
               ),
@@ -281,9 +284,9 @@ class PantallaInicio extends ConsumerWidget {
             icono: Icons.people,
             texto: textos.usuarios,
             colores: const [Color(0xFF00695C), Color(0xFF26A69A)],
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PantallaUsuarios()),
-            ),
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const PantallaUsuarios())),
           ),
           const SizedBox(height: 24),
           Text(
@@ -344,24 +347,70 @@ class TileGasto extends StatelessWidget {
     final titulo = gasto.descripcion.trim().isNotEmpty
         ? gasto.descripcion
         : (categoria?.nombre ?? '');
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-      leading: CircleAvatar(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        child: Icon(iconoDeCategoria(categoria?.icono ?? 'otros')),
-      ),
-      title: Text(titulo),
-      subtitle: Text('${fechaCorta(gasto.fecha)} · ${gasto.hechoPor}'),
-      trailing: Text(
-        formatoMoneda(gasto.montoMenor, gasto.moneda),
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+    // Fila propia (ya no es un ListTile): el ListTile le daba al monto
+    // su ancho completo y dejaba el texto en una columna angosta, así
+    // que en el celular los nombres largos se partían feo («Imprevistos
+    // y reparacione / s»). Aquí el texto manda: tiene su espacio
+    // asegurado, pasa a dos líneas cortando por palabras, y el monto se
+    // encoge un poco si hace falta, sin cortarse nunca.
+    return InkWell(
       onTap: editable
           ? () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => FormularioGasto(gasto: gasto)),
-              )
+              MaterialPageRoute(builder: (_) => FormularioGasto(gasto: gasto)),
+            )
           : null,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: color,
+              foregroundColor: Colors.white,
+              child: Icon(iconoDeCategoria(categoria?.icono ?? 'otros')),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    titulo,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${fechaCorta(gasto.fecha)} · ${gasto.hechoPor}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              flex: 4,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: Text(
+                  formatoMoneda(gasto.montoMenor, gasto.moneda),
+                  maxLines: 1,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
