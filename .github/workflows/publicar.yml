@@ -97,10 +97,11 @@ jobs:
           rm -f android/llave-original.bin
           echo "Huella de la llave que firmara el APK:"
           keytool -list -v -keystore android/finanzas-release.jks -storepass "$LLAVE_ANDROID_CLAVE" | grep "SHA256:" || true
+          keytool -list -keystore android/finanzas-release.jks -storepass "$LLAVE_ANDROID_CLAVE"
           {
             echo "storePassword=$LLAVE_ANDROID_CLAVE"
             echo "keyPassword=$LLAVE_ANDROID_CLAVE"
-            echo "keyAlias=$LLAVE_ANDROID_ALIAS"
+            echo "keyAlias=finanzas"
             echo "storeFile=finanzas-release.jks"
           } > android/key.properties
       - name: Compilar el APK
