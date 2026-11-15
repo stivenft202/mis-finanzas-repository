@@ -1029,6 +1029,72 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cambiar mi nombre'**
   String get cambiarMiNombre;
+
+  /// No description provided for @asiVaTuMes.
+  ///
+  /// In es, this message translates to:
+  /// **'Así va tu mes'**
+  String get asiVaTuMes;
+
+  /// No description provided for @resumenSinGastos.
+  ///
+  /// In es, this message translates to:
+  /// **'Registra tu primer gasto y aquí verás cómo va tu mes.'**
+  String get resumenSinGastos;
+
+  /// No description provided for @primerMesConGastos.
+  ///
+  /// In es, this message translates to:
+  /// **'Es tu primer mes con gastos registrados: todavía no hay un mes pasado con qué comparar.'**
+  String get primerMesConGastos;
+
+  /// No description provided for @mesPasadoAEstaFecha.
+  ///
+  /// In es, this message translates to:
+  /// **'El mes pasado a esta fecha:'**
+  String get mesPasadoAEstaFecha;
+
+  /// No description provided for @vasGastandoMenos.
+  ///
+  /// In es, this message translates to:
+  /// **'Vas gastando menos que el mes pasado'**
+  String get vasGastandoMenos;
+
+  /// No description provided for @vasGastandoMas.
+  ///
+  /// In es, this message translates to:
+  /// **'Vas gastando más que el mes pasado'**
+  String get vasGastandoMas;
+
+  /// No description provided for @vasIgualMesPasado.
+  ///
+  /// In es, this message translates to:
+  /// **'Vas igual que el mes pasado a esta fecha'**
+  String get vasIgualMesPasado;
+
+  /// No description provided for @promedioPorDia.
+  ///
+  /// In es, this message translates to:
+  /// **'Promedio por día:'**
+  String get promedioPorDia;
+
+  /// No description provided for @aEsteRitmoCierra.
+  ///
+  /// In es, this message translates to:
+  /// **'A este ritmo, el mes cierra en'**
+  String get aEsteRitmoCierra;
+
+  /// No description provided for @loQueMasPesa.
+  ///
+  /// In es, this message translates to:
+  /// **'Lo que más pesa:'**
+  String get loQueMasPesa;
+
+  /// No description provided for @deTusGastos.
+  ///
+  /// In es, this message translates to:
+  /// **'de tus gastos'**
+  String get deTusGastos;
 }
 
 class _AppLocalizationsDelegate

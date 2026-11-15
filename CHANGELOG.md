@@ -3,6 +3,11 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.7.2] - 2026-11-15
+
+### Agregado
+- **Tarjeta «Así va tu mes» en el inicio** (sugerencia aceptada por Esteban): justo debajo del total del mes, de un vistazo se ve (1) la comparación con el mes pasado a la misma fecha —«El mes pasado a esta fecha: $X» y si vas gastando menos (verde) o más (rojo), con el porcentaje y la diferencia—; (2) el ritmo: promedio por día y, si el mes sigue abierto, «A este ritmo, el mes cierra en ≈ $Y»; (3) lo que más pesa: la categoría mayor del mes y su porcentaje de los gastos. Sin gastos todavía, la tarjeta invita a registrar el primero; en el primer mes con datos avisa que aún no hay con qué comparar. Todo se calcula con los gastos ya registrados, sin pedir nada nuevo.
+
 ## [0.7.1] - 2026-11-15
 
 ### Agregado

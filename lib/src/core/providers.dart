@@ -37,8 +37,9 @@ class MesSeleccionado extends Notifier<DateTime> {
   void cambiar(DateTime mes) => state = inicioDelMes(mes);
 }
 
-final mesSeleccionadoProvider =
-    NotifierProvider<MesSeleccionado, DateTime>(MesSeleccionado.new);
+final mesSeleccionadoProvider = NotifierProvider<MesSeleccionado, DateTime>(
+  MesSeleccionado.new,
+);
 
 /// Todas las categorías, incluidas las ocultas.
 final categoriasTodasProvider = StreamProvider<List<Categoria>>((ref) {
@@ -58,14 +59,25 @@ final gastosDelMesProvider = StreamProvider<List<Gasto>>((ref) {
       .verGastosEntre(inicioDelMes(mes), finDelMes(mes));
 });
 
+/// Gastos del mes anterior al seleccionado, para la comparación
+/// «a esta fecha» de la tarjeta «Así va tu mes» (v0.7.2).
+final gastosMesAnteriorProvider = StreamProvider<List<Gasto>>((ref) {
+  final mes = ref.watch(mesSeleccionadoProvider);
+  final anterior = DateTime(mes.year, mes.month - 1);
+  return ref
+      .watch(baseDeDatosProvider)
+      .verGastosEntre(inicioDelMes(anterior), finDelMes(anterior));
+});
+
 /// Total del mes en la moneda base del hogar.
 final totalDelMesProvider = StreamProvider<int>((ref) {
   final mes = ref.watch(mesSeleccionadoProvider);
   return ref
       .watch(baseDeDatosProvider)
       .verGastosEntre(inicioDelMes(mes), finDelMes(mes))
-      .map((gastos) =>
-          gastos.fold<int>(0, (suma, g) => suma + g.montoBaseMenor));
+      .map(
+        (gastos) => gastos.fold<int>(0, (suma, g) => suma + g.montoBaseMenor),
+      );
 });
 
 /// Gastos fijos del mes (plantillas), ordenados por día del mes.
@@ -143,8 +155,9 @@ class ControlAcceso extends Notifier<EstadoAcceso> {
   void salir() => state = const EstadoAcceso();
 }
 
-final controlAccesoProvider =
-    NotifierProvider<ControlAcceso, EstadoAcceso>(ControlAcceso.new);
+final controlAccesoProvider = NotifierProvider<ControlAcceso, EstadoAcceso>(
+  ControlAcceso.new,
+);
 
 /// La persona que tiene la sesión abierta (dato fresco de la base).
 final usuarioActualProvider = Provider<Usuario?>((ref) {

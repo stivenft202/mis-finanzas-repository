@@ -27,6 +27,7 @@ import '../fijos/pantalla_fijos.dart';
 import '../respaldo/pantalla_respaldo.dart';
 import 'formulario_gasto.dart';
 import 'pantalla_gastos.dart';
+import 'resumen_mes.dart';
 import '../../core/ui/titulo_appbar.dart';
 
 class PantallaInicio extends ConsumerWidget {
@@ -43,6 +44,7 @@ class PantallaInicio extends ConsumerWidget {
     final mes = ref.watch(mesSeleccionadoProvider);
     final total = ref.watch(totalDelMesProvider);
     final gastos = ref.watch(gastosDelMesProvider);
+    final gastosAnteriores = ref.watch(gastosMesAnteriorProvider);
     final categorias = ref.watch(categoriasTodasProvider).value ?? const [];
     final actualizacion = ref.watch(actualizacionDisponibleProvider).value;
     final yo = ref.watch(usuarioActualProvider);
@@ -197,6 +199,24 @@ class PantallaInicio extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: 12),
+          gastos.when(
+            data: (lista) => gastosAnteriores.when(
+              data: (previos) => TarjetaResumenMes(
+                resumen: calcularResumenMes(
+                  gastosMes: lista,
+                  gastosMesPrevio: previos,
+                  mesReferencia: mes,
+                  hoy: DateTime.now(),
+                ),
+                categorias: categorias,
+              ),
+              loading: () => const SizedBox.shrink(),
+              error: (e, _) => const SizedBox.shrink(),
+            ),
+            loading: () => const SizedBox.shrink(),
+            error: (e, _) => const SizedBox.shrink(),
+          ),
           if (yo != null && yo.rol == Roles.lectura) ...[
             const SizedBox(height: 12),
             Card(
@@ -321,6 +341,110 @@ class PantallaInicio extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Tarjeta «Así va tu mes» (v0.7.2): comparación con el mes pasado a
+/// esta fecha, ritmo diario con proyección de cierre y la categoría
+/// que más pesa. El cálculo vive en resumen_mes.dart.
+class TarjetaResumenMes extends StatelessWidget {
+  const TarjetaResumenMes({
+    super.key,
+    required this.resumen,
+    required this.categorias,
+  });
+
+  final ResumenMes resumen;
+  final List<Categoria> categorias;
+
+  @override
+  Widget build(BuildContext context) {
+    final textos = context.textos;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.insights),
+                const SizedBox(width: 8),
+                Text(
+                  textos.asiVaTuMes,
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            if (resumen.totalMes == 0)
+              Text(textos.resumenSinGastos)
+            else ...[
+              if (!resumen.hayPrevio)
+                Text(textos.primerMesConGastos)
+              else ...[
+                Text(
+                  '${textos.mesPasadoAEstaFecha} '
+                  '${formatoMoneda(resumen.totalPrevioComparable, monedaPorDefecto)}',
+                ),
+                const SizedBox(height: 4),
+                _lineaVeredicto(context),
+              ],
+              const SizedBox(height: 8),
+              Text(
+                '${textos.promedioPorDia} '
+                '${formatoMoneda(resumen.promedioDiario, monedaPorDefecto)}',
+              ),
+              if (resumen.esMesActual)
+                Text(
+                  '${textos.aEsteRitmoCierra} ≈ '
+                  '${formatoMoneda(resumen.proyeccionCierre, monedaPorDefecto)}',
+                ),
+              if (resumen.categoriaTopId != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  '${textos.loQueMasPesa} '
+                  '${categoriaPorId(categorias, resumen.categoriaTopId!)?.nombre ?? ''}'
+                  ' — ${resumen.categoriaTopPorcentaje} % ${textos.deTusGastos} '
+                  '(${formatoMoneda(resumen.categoriaTopMonto, monedaPorDefecto)})',
+                ),
+              ],
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// La frase de la comparación: verde y flecha abajo si se gasta
+  /// menos que el mes pasado; roja y flecha arriba si se gasta más.
+  Widget _lineaVeredicto(BuildContext context) {
+    final textos = context.textos;
+    final dif = resumen.diferencia;
+    if (dif == 0) return Text(textos.vasIgualMesPasado);
+    final menos = dif < 0;
+    final pct = resumen.porcentajeDiferencia!.abs().round();
+    final color = menos
+        ? const Color(0xFF2E7D32)
+        : Theme.of(context).colorScheme.error;
+    return Row(
+      children: [
+        Icon(
+          menos ? Icons.trending_down : Icons.trending_up,
+          size: 20,
+          color: color,
+        ),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            '${menos ? textos.vasGastandoMenos : textos.vasGastandoMas} '
+            '($pct % · ${formatoMoneda(dif.abs(), monedaPorDefecto)})',
+            style: TextStyle(color: color, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
     );
   }
 }

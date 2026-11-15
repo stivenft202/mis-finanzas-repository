@@ -519,4 +519,39 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cambiarMiNombre => 'Cambiar mi nombre';
+
+  @override
+  String get asiVaTuMes => 'Así va tu mes';
+
+  @override
+  String get resumenSinGastos =>
+      'Registra tu primer gasto y aquí verás cómo va tu mes.';
+
+  @override
+  String get primerMesConGastos =>
+      'Es tu primer mes con gastos registrados: todavía no hay un mes pasado con qué comparar.';
+
+  @override
+  String get mesPasadoAEstaFecha => 'El mes pasado a esta fecha:';
+
+  @override
+  String get vasGastandoMenos => 'Vas gastando menos que el mes pasado';
+
+  @override
+  String get vasGastandoMas => 'Vas gastando más que el mes pasado';
+
+  @override
+  String get vasIgualMesPasado => 'Vas igual que el mes pasado a esta fecha';
+
+  @override
+  String get promedioPorDia => 'Promedio por día:';
+
+  @override
+  String get aEsteRitmoCierra => 'A este ritmo, el mes cierra en';
+
+  @override
+  String get loQueMasPesa => 'Lo que más pesa:';
+
+  @override
+  String get deTusGastos => 'de tus gastos';
 }
