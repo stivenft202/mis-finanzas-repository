@@ -288,32 +288,49 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _cambiarMiPin(yo),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.timer),
-                    title: Text(textos.bloqueoAutomatico),
-                    subtitle: Text(switch (autoBloqueo) {
-                      0 => textos.bloqueoNunca,
-                      1 => textos.bloqueoTras1,
-                      15 => textos.bloqueoTras15,
-                      _ => textos.bloqueoTras5,
-                    }),
-                    trailing: DropdownButton<int>(
-                      value: const [0, 1, 5, 15].contains(autoBloqueo)
-                          ? autoBloqueo
-                          : 5,
-                      items: [
-                        DropdownMenuItem(
-                            value: 0, child: Text(textos.bloqueoNunca)),
-                        DropdownMenuItem(
-                            value: 1, child: Text(textos.bloqueoTras1)),
-                        DropdownMenuItem(
-                            value: 5, child: Text(textos.bloqueoTras5)),
-                        DropdownMenuItem(
-                            value: 15, child: Text(textos.bloqueoTras15)),
+                  // El selector va DEBAJO del título, a todo el ancho:
+                  // como botón lateral apretaba el título hasta salir
+                  // letra por letra en los celulares (visto por Esteban).
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.timer),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                textos.bloqueoAutomatico,
+                                style:
+                                    Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<int>(
+                          isExpanded: true,
+                          initialValue:
+                              const [0, 1, 5, 15].contains(autoBloqueo)
+                                  ? autoBloqueo
+                                  : 5,
+                          items: [
+                            DropdownMenuItem(
+                                value: 0, child: Text(textos.bloqueoNunca)),
+                            DropdownMenuItem(
+                                value: 1, child: Text(textos.bloqueoTras1)),
+                            DropdownMenuItem(
+                                value: 5, child: Text(textos.bloqueoTras5)),
+                            DropdownMenuItem(
+                                value: 15, child: Text(textos.bloqueoTras15)),
+                          ],
+                          onChanged: (valor) {
+                            if (valor != null) _cambiarAutoBloqueo(valor);
+                          },
+                        ),
                       ],
-                      onChanged: (valor) {
-                        if (valor != null) _cambiarAutoBloqueo(valor);
-                      },
                     ),
                   ),
                 ],

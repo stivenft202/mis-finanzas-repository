@@ -3,6 +3,12 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.6.1] - 2026-11-14
+
+### Corregido
+- En «Usuarios», el título «Bloqueo automático» salía letra por letra en los celulares: el selector de minutos, puesto al lado, lo dejaba sin espacio. Ahora el selector va debajo del título, a todo el ancho.
+- Los botones con degradado del inicio recortaban su texto en los celulares angostos («Ver gas…», «Catego…», «Fijos d…»). Ahora son un poco más altos, con la letra un poco más pequeña y un ajuste automático: el texto se encoge lo justo si hace falta, pero nunca se corta.
+
 ## [0.6.0] - 2026-11-14
 
 ### Agregado

@@ -216,7 +216,7 @@ class PantallaInicio extends ConsumerWidget {
             icono: Icons.add_circle,
             texto: textos.agregarGasto,
             colores: const [Color(0xFF2E7D32), Color(0xFF66BB6A)],
-            alto: 68,
+            alto: 74,
             onPressed: editable
                 ? () => Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const FormularioGasto()),
