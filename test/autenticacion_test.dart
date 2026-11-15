@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:finanzas_hogar/src/core/base_de_datos/base_de_datos.dart';
 import 'package:finanzas_hogar/src/core/seguridad/autenticacion.dart';
@@ -178,6 +179,88 @@ void main() {
         await servicio.claveActualCoincide(usuario.id, 'secreto1'),
         isFalse,
       );
+    });
+  });
+
+  group('renombrar personas (v0.7.1)', () {
+    test(
+      'cambia el nombre y el acceso sigue igual (misma clave y PIN)',
+      () async {
+        final usuario = await servicio.crearPersona(
+          nombre: 'Esteban',
+          rol: Roles.administrador,
+          clave: 'secreto1',
+          pin: '1234',
+        );
+        await servicio.renombrarPersona(usuario.id, 'Esteban Franco');
+        expect((await base.usuarioPorId(usuario.id))?.nombre, 'Esteban Franco');
+        expect(
+          await servicio.entrarConClave(usuario.id, 'secreto1'),
+          ResultadoAcceso.correcto,
+        );
+        expect(
+          await servicio.entrarConPin(usuario.id, '1234'),
+          ResultadoAcceso.correcto,
+        );
+      },
+    );
+
+    test('no deja un nombre vacío ni uno ya usado por otra persona', () async {
+      final uno = await servicio.crearPersona(
+        nombre: 'Ana',
+        rol: Roles.miembro,
+        clave: 'secreto1',
+        pin: '1234',
+      );
+      await servicio.crearPersona(
+        nombre: 'Luis',
+        rol: Roles.miembro,
+        clave: 'secreto1',
+        pin: '1234',
+      );
+      expect(
+        () => servicio.renombrarPersona(uno.id, '  '),
+        throwsArgumentError,
+      );
+      expect(
+        () => servicio.renombrarPersona(uno.id, 'LUIS'),
+        throwsArgumentError,
+      );
+      // Su propio nombre con otras mayúsculas no es error: no cambia.
+      await servicio.renombrarPersona(uno.id, 'ana');
+      expect((await base.usuarioPorId(uno.id))?.nombre, 'Ana');
+    });
+
+    test('el historial de gastos queda con el nombre nuevo', () async {
+      final usuario = await servicio.crearPersona(
+        nombre: 'Esteban',
+        rol: Roles.administrador,
+        clave: 'secreto1',
+        pin: '1234',
+      );
+      final categoriaId = await base
+          .into(base.categorias)
+          .insert(
+            CategoriasCompanion.insert(
+              nombre: 'Mercado y comida',
+              colorValor: 0xFF2E7D32,
+            ),
+          );
+      final ahora = DateTime(2026, 11, 14);
+      await base.crearGasto(
+        GastosCompanion.insert(
+          montoMenor: 45000,
+          montoBaseMenor: 45000,
+          fecha: ahora,
+          categoriaId: categoriaId,
+          hechoPor: const Value('Esteban'),
+          creadoEn: ahora,
+          actualizadoEn: ahora,
+        ),
+      );
+      await servicio.renombrarPersona(usuario.id, 'Esteban Franco');
+      final gasto = await base.select(base.gastos).getSingle();
+      expect(gasto.hechoPor, 'Esteban Franco');
     });
   });
 }

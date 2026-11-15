@@ -50,7 +50,7 @@ abstract interface class AlmacenClaves {
 /// Almacén real: el almacenamiento seguro del dispositivo.
 class AlmacenClavesSeguro implements AlmacenClaves {
   AlmacenClavesSeguro([FlutterSecureStorage? almacenamiento])
-      : _almacenamiento = almacenamiento ?? const FlutterSecureStorage();
+    : _almacenamiento = almacenamiento ?? const FlutterSecureStorage();
 
   final FlutterSecureStorage _almacenamiento;
 
@@ -100,8 +100,7 @@ class ServicioAutenticacion {
   static const int maxIntentos = 5;
   static const Duration duracionBloqueo = Duration(minutes: 1);
 
-  String _claveHuella(int usuarioId, String tipo) =>
-      'cred_${usuarioId}_$tipo';
+  String _claveHuella(int usuarioId, String tipo) => 'cred_${usuarioId}_$tipo';
   String _claveIntentos(int usuarioId) => 'intentos_$usuarioId';
   String _claveBloqueo(int usuarioId) => 'bloqueo_$usuarioId';
 
@@ -116,7 +115,10 @@ class ServicioAutenticacion {
   }
 
   Future<bool> _secretoCoincide(
-      int usuarioId, String tipo, String secreto) async {
+    int usuarioId,
+    String tipo,
+    String secreto,
+  ) async {
     final guardado = await _almacen.leer(_claveHuella(usuarioId, tipo));
     if (guardado == null) return false;
     final partes = guardado.split(':');
@@ -152,20 +154,21 @@ class ServicioAutenticacion {
     if (texto == null) return null;
     final hasta = int.tryParse(texto);
     if (hasta == null) return null;
-    final restante =
-        DateTime.fromMillisecondsSinceEpoch(hasta).difference(DateTime.now());
+    final restante = DateTime.fromMillisecondsSinceEpoch(hasta)
+        .difference(DateTime.now());
     return restante > Duration.zero ? restante : null;
   }
 
   Future<void> _registrarFallo(int usuarioId) async {
     final actual =
-        int.tryParse(await _almacen.leer(_claveIntentos(usuarioId)) ?? '') ??
-            0;
+        int.tryParse(await _almacen.leer(_claveIntentos(usuarioId)) ?? '') ?? 0;
     final nuevo = actual + 1;
     if (nuevo >= maxIntentos) {
       final hasta = DateTime.now().add(duracionBloqueo);
       await _almacen.guardar(
-          _claveBloqueo(usuarioId), hasta.millisecondsSinceEpoch.toString());
+        _claveBloqueo(usuarioId),
+        hasta.millisecondsSinceEpoch.toString(),
+      );
       await _almacen.guardar(_claveIntentos(usuarioId), '0');
     } else {
       await _almacen.guardar(_claveIntentos(usuarioId), nuevo.toString());
@@ -180,7 +183,10 @@ class ServicioAutenticacion {
   // ----- Entradas -----
 
   Future<ResultadoAcceso> _intentar(
-      int usuarioId, String tipo, String secreto) async {
+    int usuarioId,
+    String tipo,
+    String secreto,
+  ) async {
     if (await bloqueoRestante(usuarioId) != null) {
       return ResultadoAcceso.bloqueado;
     }
@@ -244,6 +250,31 @@ class ServicioAutenticacion {
     await fijarPin(id, pin);
     final creado = await _base.usuarioPorId(id);
     return creado!;
+  }
+
+  /// Cambia el nombre de una persona (v0.7.1). Su historial la sigue:
+  /// los gastos que decían su nombre viejo quedan con el nuevo, y su
+  /// contraseña y su PIN no cambian (van por su número de usuario).
+  ///
+  /// Lanza [ArgumentError] si el nombre queda vacío o ya lo usa otra
+  /// persona (sin distinguir mayúsculas).
+  Future<void> renombrarPersona(int usuarioId, String nuevoNombre) async {
+    final limpio = nuevoNombre.trim();
+    if (limpio.isEmpty) {
+      throw ArgumentError('Escribe un nombre.');
+    }
+    final actual = await _base.usuarioPorId(usuarioId);
+    if (actual == null) {
+      throw ArgumentError('Esa persona ya no existe.');
+    }
+    if (actual.nombre.trim().toLowerCase() == limpio.toLowerCase()) return;
+    if (await nombreEnUso(limpio, exceptoId: usuarioId)) {
+      throw ArgumentError('Ya hay una persona con ese nombre.');
+    }
+    await _base.transaction(() async {
+      await _base.actualizarUsuario(actual.copyWith(nombre: limpio));
+      await _base.renombrarHechoPor(actual.nombre, limpio);
+    });
   }
 
   /// Elimina a la persona y sus credenciales de este equipo.

@@ -1017,6 +1017,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No identifiqué la categoría: revisa la que quedó marcada.'**
   String get sinCategoriaEscuchada;
+
+  /// No description provided for @cambiarNombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar nombre'**
+  String get cambiarNombre;
+
+  /// No description provided for @cambiarMiNombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar mi nombre'**
+  String get cambiarMiNombre;
 }
 
 class _AppLocalizationsDelegate

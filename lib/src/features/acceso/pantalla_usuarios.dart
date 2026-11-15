@@ -28,13 +28,21 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
   }
 
   /// Diálogo con campos de texto; devuelve los valores escritos o null.
+  /// [iniciales] trae los campos ya escritos (p. ej. el nombre actual
+  /// al renombrar a una persona).
   Future<List<String>?> _dialogoCampos({
     required String titulo,
     required List<(String, bool, TextInputType?)> campos,
     String? errorInicial,
+    List<String>? iniciales,
   }) {
     final textos = context.textos;
-    final controles = [for (final _ in campos) TextEditingController()];
+    final controles = [
+      for (var i = 0; i < campos.length; i++)
+        TextEditingController(
+          text: iniciales != null && i < iniciales.length ? iniciales[i] : null,
+        ),
+    ];
     String? error = errorInicial;
     return showDialog<List<String>>(
       context: context,
@@ -74,6 +82,31 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
         ),
       ),
     );
+  }
+
+  /// Cambiar el nombre de una persona (la propia o, siendo
+  /// administrador, la de otra). El campo viene con el nombre actual.
+  Future<void> _renombrarPersona(Usuario persona) async {
+    final textos = context.textos;
+    final valores = await _dialogoCampos(
+      titulo: textos.cambiarNombre,
+      campos: [(textos.nombrePersona, false, TextInputType.text)],
+      iniciales: [persona.nombre],
+    );
+    if (valores == null || !mounted) return;
+    final nuevo = valores[0].trim();
+    if (nuevo.isEmpty) {
+      _aviso(textos.errorNombre);
+      return;
+    }
+    final servicio = ref.read(servicioAutenticacionProvider);
+    try {
+      await servicio.renombrarPersona(persona.id, nuevo);
+    } on ArgumentError catch (e) {
+      if (mounted) _aviso('${e.message}');
+      return;
+    }
+    if (mounted) _aviso(textos.cambiosGuardados);
   }
 
   Future<void> _cambiarMiClave(Usuario yo) async {
@@ -148,6 +181,11 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
               subtitle: Text(nombreRol(ctx, persona.rol)),
             ),
             ListTile(
+              leading: const Icon(Icons.edit),
+              title: Text(textos.cambiarNombre),
+              onTap: () => Navigator.of(ctx).pop('nombre'),
+            ),
+            ListTile(
               leading: const Icon(Icons.badge),
               title: Text(textos.cambiarRol),
               onTap: () => Navigator.of(ctx).pop('rol'),
@@ -181,6 +219,8 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
     final servicio = ref.read(servicioAutenticacionProvider);
     final base = ref.read(baseDeDatosProvider);
     switch (opcion) {
+      case 'nombre':
+        await _renombrarPersona(persona);
       case 'rol':
         final nuevo = await showDialog<String>(
           context: context,
@@ -285,6 +325,12 @@ class _Estado extends ConsumerState<PantallaUsuarios> {
             Card(
               child: Column(
                 children: [
+                  ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: Text(textos.cambiarMiNombre),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _renombrarPersona(yo),
+                  ),
                   ListTile(
                     leading: const Icon(Icons.lock),
                     title: Text(textos.cambiarContrasena),

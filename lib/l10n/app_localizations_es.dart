@@ -513,4 +513,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get sinCategoriaEscuchada =>
       'No identifiqué la categoría: revisa la que quedó marcada.';
+
+  @override
+  String get cambiarNombre => 'Cambiar nombre';
+
+  @override
+  String get cambiarMiNombre => 'Cambiar mi nombre';
 }

@@ -122,27 +122,32 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) async {
-          await m.createAll();
-          await _sembrarCategorias();
-        },
-        onUpgrade: (m, desde, hasta) async {
-          if (desde < 2) {
-            // v0.3.0: nace la tabla de gastos e ingresos fijos.
-            await m.createTable(fijos);
-          }
-          if (desde < 3) {
-            // v0.6.0: nacen los usuarios del hogar (roles y acceso).
-            await m.createTable(usuarios);
-          }
-        },
-      );
+    onCreate: (m) async {
+      await m.createAll();
+      await _sembrarCategorias();
+    },
+    onUpgrade: (m, desde, hasta) async {
+      if (desde < 2) {
+        // v0.3.0: nace la tabla de gastos e ingresos fijos.
+        await m.createTable(fijos);
+      }
+      if (desde < 3) {
+        // v0.6.0: nacen los usuarios del hogar (roles y acceso).
+        await m.createTable(usuarios);
+      }
+    },
+  );
 
   /// Las 8 categorías iniciales que pidió Esteban (Fase 0/1).
   Future<void> _sembrarCategorias() async {
     const iniciales = <(String, int, String, String?)>[
       ('Mercado y comida', 0xFF2E7D32, 'mercado', 'mercado'),
-      ('Servicios públicos e internet/TV', 0xFF1565C0, 'servicios', 'servicios'),
+      (
+        'Servicios públicos e internet/TV',
+        0xFF1565C0,
+        'servicios',
+        'servicios',
+      ),
       ('Transporte y combustible', 0xFFEF6C00, 'transporte', null),
       ('Salud y medicinas', 0xFFC62828, 'salud', null),
       ('Educación e hijos', 0xFF6A1B9A, 'educacion', null),
@@ -172,7 +177,10 @@ class BaseDeDatos extends _$BaseDeDatos {
   /// Categorías en orden; por defecto solo las visibles.
   Stream<List<Categoria>> verCategorias({bool soloVisibles = false}) {
     final consulta = select(categorias)
-      ..orderBy([(c) => OrderingTerm.asc(c.orden), (c) => OrderingTerm.asc(c.nombre)]);
+      ..orderBy([
+        (c) => OrderingTerm.asc(c.orden),
+        (c) => OrderingTerm.asc(c.nombre),
+      ]);
     if (soloVisibles) {
       consulta.where((c) => c.oculta.equals(false));
     }
@@ -190,10 +198,11 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   Future<int> contarGastosDeCategoria(int categoriaId) async {
     final conteo = gastos.id.count();
-    final fila = await (selectOnly(gastos)
-          ..addColumns([conteo])
-          ..where(gastos.categoriaId.equals(categoriaId)))
-        .getSingle();
+    final fila =
+        await (selectOnly(gastos)
+              ..addColumns([conteo])
+              ..where(gastos.categoriaId.equals(categoriaId)))
+            .getSingle();
     return fila.read(conteo) ?? 0;
   }
 
@@ -202,20 +211,27 @@ class BaseDeDatos extends _$BaseDeDatos {
   /// Gastos de un rango de fechas, del más reciente al más antiguo.
   Stream<List<Gasto>> verGastosEntre(DateTime desde, DateTime hastaExclusivo) {
     return (select(gastos)
-          ..where((g) =>
-              g.fecha.isBiggerOrEqualValue(desde) &
-              g.fecha.isSmallerThanValue(hastaExclusivo))
-          ..orderBy([(g) => OrderingTerm.desc(g.fecha), (g) => OrderingTerm.desc(g.id)]))
+          ..where(
+            (g) =>
+                g.fecha.isBiggerOrEqualValue(desde) &
+                g.fecha.isSmallerThanValue(hastaExclusivo),
+          )
+          ..orderBy([
+            (g) => OrderingTerm.desc(g.fecha),
+            (g) => OrderingTerm.desc(g.id),
+          ]))
         .watch();
   }
 
   /// Total (en la moneda base) de los gastos de un rango.
   Future<int> totalEntre(DateTime desde, DateTime hastaExclusivo) async {
-    final filas = await (select(gastos)
-          ..where((g) =>
-              g.fecha.isBiggerOrEqualValue(desde) &
-              g.fecha.isSmallerThanValue(hastaExclusivo)))
-        .get();
+    final filas =
+        await (select(gastos)..where(
+              (g) =>
+                  g.fecha.isBiggerOrEqualValue(desde) &
+                  g.fecha.isSmallerThanValue(hastaExclusivo),
+            ))
+            .get();
     return filas.fold<int>(0, (suma, g) => suma + g.montoBaseMenor);
   }
 
@@ -241,8 +257,9 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   /// Suma de los montos de un tipo de fijo.
   Future<int> totalFijos(String tipo) async {
-    final filas =
-        await (select(fijos)..where((f) => f.tipo.equals(tipo))).get();
+    final filas = await (select(
+      fijos,
+    )..where((f) => f.tipo.equals(tipo))).get();
     return filas.fold<int>(0, (suma, f) => suma + f.montoMenor);
   }
 
@@ -257,14 +274,13 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   /// Todas las personas del hogar, en orden alfabético.
   Stream<List<Usuario>> verUsuarios() {
-    return (select(usuarios)
-          ..orderBy([(u) => OrderingTerm.asc(u.nombre)]))
-        .watch();
+    return (select(
+      usuarios,
+    )..orderBy([(u) => OrderingTerm.asc(u.nombre)])).watch();
   }
 
-  Future<List<Usuario>> listaUsuarios() => (select(usuarios)
-        ..orderBy([(u) => OrderingTerm.asc(u.nombre)]))
-      .get();
+  Future<List<Usuario>> listaUsuarios() =>
+      (select(usuarios)..orderBy([(u) => OrderingTerm.asc(u.nombre)])).get();
 
   Future<Usuario?> usuarioPorId(int id) =>
       (select(usuarios)..where((u) => u.id.equals(id))).getSingleOrNull();
@@ -284,6 +300,14 @@ class BaseDeDatos extends _$BaseDeDatos {
 
   Future<bool> actualizarUsuario(Usuario usuario) =>
       update(usuarios).replace(usuario);
+
+  /// Cambia el «¿Quién lo hizo?» de los gastos de [nombreViejo] a
+  /// [nombreNuevo]: al renombrar a una persona, su historial la sigue
+  /// y no queda partida bajo dos nombres (v0.7.1).
+  Future<int> renombrarHechoPor(String nombreViejo, String nombreNuevo) =>
+      (update(gastos)..where((g) => g.hechoPor.equals(nombreViejo))).write(
+        GastosCompanion(hechoPor: Value(nombreNuevo)),
+      );
 
   Future<int> eliminarUsuario(int id) =>
       (delete(usuarios)..where((u) => u.id.equals(id))).go();
@@ -416,8 +440,9 @@ class BaseDeDatos extends _$BaseDeDatos {
             id: Value(entero(f, 'id')),
             montoMenor: Value(entero(f, 'montoMenor')),
             moneda: Value(f['moneda']?.toString() ?? 'COP'),
-            tasaBase:
-                Value(f['tasaBase'] is num ? (f['tasaBase'] as num).toDouble() : 1.0),
+            tasaBase: Value(
+              f['tasaBase'] is num ? (f['tasaBase'] as num).toDouble() : 1.0,
+            ),
             montoBaseMenor: Value(entero(f, 'montoBaseMenor')),
             fecha: Value(fecha(f, 'fecha')),
             categoriaId: Value(entero(f, 'categoriaId')),

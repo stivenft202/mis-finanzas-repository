@@ -3,6 +3,11 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.7.1] - 2026-11-15
+
+### Agregado
+- **Cambiar el nombre de usuario** (pedido de Esteban): en «Usuarios», cada persona puede cambiar su propio nombre desde «Mi seguridad → Cambiar mi nombre», y el administrador puede cambiar el de cualquier persona tocándola en «Personas del hogar → Cambiar nombre». El campo viene con el nombre actual escrito. No se permiten nombres vacíos ni repetidos (ni con otras mayúsculas). La contraseña y el PIN no cambian, y el historial sigue a la persona: los gastos que decían su nombre viejo quedan con el nombre nuevo.
+
 ## [0.7.0] - 2026-11-15
 
 ### Agregado
