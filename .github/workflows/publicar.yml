@@ -7,6 +7,9 @@ name: Pruebas y publicación
 #   la publicación con los dos archivos. Si ya existe, no la duplica.
 # Es el mismo lugar (Releases) que la app revisará en la Fase 10
 # para actualizarse sola.
+# - Android se firma SIEMPRE con la misma llave permanente (v0.6.2):
+#   la llave llega como secreto del repositorio, nunca como archivo
+#   del código. Así el celular acepta las actualizaciones.
 
 on:
   push:
@@ -46,7 +49,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: datos
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: *//' | cut -d'+' -f1)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
@@ -77,6 +80,19 @@ jobs:
         run: chmod +x android/gradlew
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
+      - name: Poner la llave de firma permanente de la app
+        env:
+          LLAVE_ANDROID_BASE64: ${{ secrets.LLAVE_ANDROID_BASE64 }}
+          LLAVE_ANDROID_CLAVE: ${{ secrets.LLAVE_ANDROID_CLAVE }}
+          LLAVE_ANDROID_ALIAS: ${{ secrets.LLAVE_ANDROID_ALIAS }}
+        run: |
+          echo "$LLAVE_ANDROID_BASE64" | base64 --decode > android/finanzas-release.jks
+          {
+            echo "storePassword=$LLAVE_ANDROID_CLAVE"
+            echo "keyPassword=$LLAVE_ANDROID_CLAVE"
+            echo "keyAlias=$LLAVE_ANDROID_ALIAS"
+            echo "storeFile=finanzas-release.jks"
+          } > android/key.properties
       - name: Compilar el APK
         run: flutter build apk --release
       - name: Guardar el APK para la publicación
@@ -131,7 +147,7 @@ jobs:
           path: archivos
       - name: Crear la publicación
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${{ needs.version.outputs.version }}"
           mv "archivos/app-release.apk" "archivos/Finanzas-del-Hogar-Android-v$VERSION.apk"
