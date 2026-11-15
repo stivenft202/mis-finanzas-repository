@@ -1095,6 +1095,138 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'de tus gastos'**
   String get deTusGastos;
+
+  /// No description provided for @nubeDelHogar.
+  ///
+  /// In es, this message translates to:
+  /// **'Nube del hogar'**
+  String get nubeDelHogar;
+
+  /// No description provided for @nubeExplicacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Con una cuenta del hogar, este equipo y los demás se ponen al día solos: lo que registres aquí aparece en los otros, sin exportar archivos. La app sigue funcionando sin internet y sincroniza cuando vuelve la conexión.'**
+  String get nubeExplicacion;
+
+  /// No description provided for @nubeCorreo.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo de la cuenta del hogar'**
+  String get nubeCorreo;
+
+  /// No description provided for @nubeContrasena.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña de la cuenta del hogar'**
+  String get nubeContrasena;
+
+  /// No description provided for @crearCuentaHogar.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear cuenta del hogar'**
+  String get crearCuentaHogar;
+
+  /// No description provided for @yaTengoCuenta.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya tengo cuenta: entrar'**
+  String get yaTengoCuenta;
+
+  /// No description provided for @faltaCorreoClaveNube.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribe el correo y la contraseña de la cuenta del hogar.'**
+  String get faltaCorreoClaveNube;
+
+  /// No description provided for @conectadoComo.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectado como'**
+  String get conectadoComo;
+
+  /// No description provided for @ultimaSincronizacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Última sincronización:'**
+  String get ultimaSincronizacion;
+
+  /// No description provided for @nuncaSincronizado.
+  ///
+  /// In es, this message translates to:
+  /// **'Todavía no se ha sincronizado.'**
+  String get nuncaSincronizado;
+
+  /// No description provided for @sincronizarAhora.
+  ///
+  /// In es, this message translates to:
+  /// **'Sincronizar ahora'**
+  String get sincronizarAhora;
+
+  /// No description provided for @sincronizando.
+  ///
+  /// In es, this message translates to:
+  /// **'Sincronizando…'**
+  String get sincronizando;
+
+  /// No description provided for @salirCuentaEquipo.
+  ///
+  /// In es, this message translates to:
+  /// **'Salir de la cuenta en este equipo'**
+  String get salirCuentaEquipo;
+
+  /// No description provided for @salirCuentaExplicacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Este equipo deja de sincronizar. Los datos que ya están aquí NO se borran, y la nube y los otros equipos no se tocan.'**
+  String get salirCuentaExplicacion;
+
+  /// No description provided for @nubeAlDia.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo está al día.'**
+  String get nubeAlDia;
+
+  /// No description provided for @nubeSubidoOk.
+  ///
+  /// In es, this message translates to:
+  /// **'Se subieron los datos de este equipo.'**
+  String get nubeSubidoOk;
+
+  /// No description provided for @nubeBajadoOk.
+  ///
+  /// In es, this message translates to:
+  /// **'Se bajaron los datos de la nube.'**
+  String get nubeBajadoOk;
+
+  /// No description provided for @nubeConflictoTitulo.
+  ///
+  /// In es, this message translates to:
+  /// **'Este equipo y la nube tienen datos distintos'**
+  String get nubeConflictoTitulo;
+
+  /// No description provided for @nubeConflictoExplicacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Es la primera vez que se encuentran y cada uno trae sus propios datos. Elige cuáles mandan; los otros se reemplazan. Esto se pregunta una sola vez.'**
+  String get nubeConflictoExplicacion;
+
+  /// No description provided for @usarDatosNube.
+  ///
+  /// In es, this message translates to:
+  /// **'Usar los datos de la nube'**
+  String get usarDatosNube;
+
+  /// No description provided for @usarDatosEquipo.
+  ///
+  /// In es, this message translates to:
+  /// **'Usar los datos de este equipo'**
+  String get usarDatosEquipo;
+
+  /// No description provided for @nubeNoConfigurada.
+  ///
+  /// In es, this message translates to:
+  /// **'La nube aún no está conectada al proyecto de Firebase. Cuando estén los datos del proyecto, esta pantalla cobra vida.'**
+  String get nubeNoConfigurada;
 }
 
 class _AppLocalizationsDelegate

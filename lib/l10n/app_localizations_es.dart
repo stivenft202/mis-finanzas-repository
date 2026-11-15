@@ -554,4 +554,76 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get deTusGastos => 'de tus gastos';
+
+  @override
+  String get nubeDelHogar => 'Nube del hogar';
+
+  @override
+  String get nubeExplicacion =>
+      'Con una cuenta del hogar, este equipo y los demás se ponen al día solos: lo que registres aquí aparece en los otros, sin exportar archivos. La app sigue funcionando sin internet y sincroniza cuando vuelve la conexión.';
+
+  @override
+  String get nubeCorreo => 'Correo de la cuenta del hogar';
+
+  @override
+  String get nubeContrasena => 'Contraseña de la cuenta del hogar';
+
+  @override
+  String get crearCuentaHogar => 'Crear cuenta del hogar';
+
+  @override
+  String get yaTengoCuenta => 'Ya tengo cuenta: entrar';
+
+  @override
+  String get faltaCorreoClaveNube =>
+      'Escribe el correo y la contraseña de la cuenta del hogar.';
+
+  @override
+  String get conectadoComo => 'Conectado como';
+
+  @override
+  String get ultimaSincronizacion => 'Última sincronización:';
+
+  @override
+  String get nuncaSincronizado => 'Todavía no se ha sincronizado.';
+
+  @override
+  String get sincronizarAhora => 'Sincronizar ahora';
+
+  @override
+  String get sincronizando => 'Sincronizando…';
+
+  @override
+  String get salirCuentaEquipo => 'Salir de la cuenta en este equipo';
+
+  @override
+  String get salirCuentaExplicacion =>
+      'Este equipo deja de sincronizar. Los datos que ya están aquí NO se borran, y la nube y los otros equipos no se tocan.';
+
+  @override
+  String get nubeAlDia => 'Todo está al día.';
+
+  @override
+  String get nubeSubidoOk => 'Se subieron los datos de este equipo.';
+
+  @override
+  String get nubeBajadoOk => 'Se bajaron los datos de la nube.';
+
+  @override
+  String get nubeConflictoTitulo =>
+      'Este equipo y la nube tienen datos distintos';
+
+  @override
+  String get nubeConflictoExplicacion =>
+      'Es la primera vez que se encuentran y cada uno trae sus propios datos. Elige cuáles mandan; los otros se reemplazan. Esto se pregunta una sola vez.';
+
+  @override
+  String get usarDatosNube => 'Usar los datos de la nube';
+
+  @override
+  String get usarDatosEquipo => 'Usar los datos de este equipo';
+
+  @override
+  String get nubeNoConfigurada =>
+      'La nube aún no está conectada al proyecto de Firebase. Cuando estén los datos del proyecto, esta pantalla cobra vida.';
 }

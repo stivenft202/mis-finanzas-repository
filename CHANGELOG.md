@@ -3,6 +3,22 @@
 Todos los cambios importantes de la app, versión por versión.
 Formato basado en «Keep a Changelog», con versionado semántico.
 
+## [0.8.0] - 2026-11-15
+
+### Agregado
+
+- **Nube del hogar (sincronización entre equipos)**: nueva pantalla
+  «Nube del hogar» para crear la cuenta del hogar (correo y contraseña)
+  o entrar con ella en cada equipo. Los equipos se ponen al día solos:
+  gastos, categorías, fijos del mes, personas y sus huellas de acceso
+  (nunca las claves en claro). La app sigue guardando todo en el propio
+  equipo y funciona sin internet; sincroniza al abrir y cada 90
+  segundos con conexión. Primera vez con datos en los dos lados: la
+  app pregunta cuáles mandan antes de reemplazar nada; si cambian los
+  dos, gana el cambio más reciente. La nube es Firebase (el proyecto
+  del usuario); cada hogar solo puede ver sus propios datos, protegido
+  por las reglas de la base de datos.
+
 ## [0.7.2] - 2026-11-15
 
 ### Agregado

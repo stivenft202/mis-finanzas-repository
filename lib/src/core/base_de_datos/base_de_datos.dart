@@ -484,4 +484,70 @@ class BaseDeDatos extends _$BaseDeDatos {
       });
     });
   }
+
+  // ---------------- Sincronización con la nube (v0.8.0) ----------------
+
+  /// La «foto completa» para la nube: como [exportarDatos] pero en
+  /// formato 2, con las personas del hogar incluidas (sin claves: las
+  /// huellas de acceso viajan aparte, por el servicio de
+  /// autenticación, y nunca en texto plano).
+  Future<Map<String, Object?>> exportarSync() async {
+    final datos = await exportarDatos();
+    final lista = await listaUsuarios();
+    return {
+      ...datos,
+      'formato': 2,
+      'usuarios': [
+        for (final u in lista)
+          {
+            'id': u.id,
+            'nombre': u.nombre,
+            'rol': u.rol,
+            'creadoEn': u.creadoEn.toIso8601String(),
+          },
+      ],
+    };
+  }
+
+  /// Reemplaza TODO por una foto de [exportarSync] (formato 2): los
+  /// datos por la vía del respaldo y las personas conservando sus
+  /// números, para que las huellas de acceso sigan calzando.
+  Future<void> importarSync(Map<String, Object?> datos) async {
+    if (datos['aplicacion'] != 'finanzas-hogar' || datos['formato'] != 2) {
+      throw const FormatException('No es una foto de sincronización válida.');
+    }
+    final crudos = datos['usuarios'];
+    if (crudos is! List) {
+      throw const FormatException('A la foto le faltan las personas.');
+    }
+    final nuevosUsuarios = <UsuariosCompanion>[];
+    for (final crudo in crudos) {
+      if (crudo is! Map) {
+        throw const FormatException('Una persona de la foto está dañada.');
+      }
+      final f = crudo.map((k, v) => MapEntry(k.toString(), v));
+      final id = f['id'];
+      final nombre = f['nombre'];
+      final rol = f['rol'];
+      final creado = f['creadoEn'];
+      if (id is! num || nombre is! String || rol is! String || creado is! String) {
+        throw const FormatException('Una persona de la foto está dañada.');
+      }
+      nuevosUsuarios.add(
+        UsuariosCompanion(
+          id: Value(id.toInt()),
+          nombre: Value(nombre),
+          rol: Value(rol),
+          creadoEn: Value(DateTime.parse(creado)),
+        ),
+      );
+    }
+    await importarDatos({...datos, 'formato': 1});
+    await transaction(() async {
+      await delete(usuarios).go();
+      await batch((b) {
+        b.insertAll(usuarios, nuevosUsuarios);
+      });
+    });
+  }
 }

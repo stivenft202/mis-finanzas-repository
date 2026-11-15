@@ -24,6 +24,7 @@ import '../categorias/pantalla_categorias.dart';
 import '../actualizaciones/pantalla_actualizacion.dart';
 import '../actualizaciones/servicio_actualizacion.dart';
 import '../fijos/pantalla_fijos.dart';
+import '../nube/pantalla_nube.dart';
 import '../respaldo/pantalla_respaldo.dart';
 import 'formulario_gasto.dart';
 import 'pantalla_gastos.dart';
@@ -45,6 +46,9 @@ class PantallaInicio extends ConsumerWidget {
     final total = ref.watch(totalDelMesProvider);
     final gastos = ref.watch(gastosDelMesProvider);
     final gastosAnteriores = ref.watch(gastosMesAnteriorProvider);
+    // Mirar el servicio de la nube lo pone a existir: arranca la
+    // sincronización automática si hay cuenta en este equipo.
+    ref.watch(servicioNubeProvider);
     final categorias = ref.watch(categoriasTodasProvider).value ?? const [];
     final actualizacion = ref.watch(actualizacionDisponibleProvider).value;
     final yo = ref.watch(usuarioActualProvider);
@@ -307,6 +311,15 @@ class PantallaInicio extends ConsumerWidget {
             onPressed: () => Navigator.of(
               context,
             ).push(MaterialPageRoute(builder: (_) => const PantallaUsuarios())),
+          ),
+          const SizedBox(height: 12),
+          BotonDegradado(
+            icono: Icons.cloud_sync,
+            texto: textos.nubeDelHogar,
+            colores: const [Color(0xFF0277BD), Color(0xFF29B6F6)],
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PantallaNube()),
+            ),
           ),
           const SizedBox(height: 24),
           Text(

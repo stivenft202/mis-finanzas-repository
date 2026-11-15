@@ -282,6 +282,45 @@ class ServicioAutenticacion {
     await borrarCredenciales(usuarioId);
     await _base.eliminarUsuario(usuarioId);
   }
+
+  // ----- Credenciales para la nube (v0.8.0) -----
+
+  /// Las huellas guardadas de estas personas, listas para viajar a la
+  /// nube: mapa «cred_<id>_<tipo>» → «sal:huella». Viaja la huella, la
+  /// misma que ya guarda el equipo; la clave en claro nunca sale.
+  Future<Map<String, String>> credencialesParaSync(List<int> ids) async {
+    final salida = <String, String>{};
+    for (final id in ids) {
+      for (final tipo in const ['clave', 'pin']) {
+        final claveAlmacen = _claveHuella(id, tipo);
+        final valor = await _almacen.leer(claveAlmacen);
+        if (valor != null) salida[claveAlmacen] = valor;
+      }
+    }
+    return salida;
+  }
+
+  /// Deja las credenciales de este equipo iguales a las de la foto de
+  /// la nube: guarda las que vienen y borra las de las personas
+  /// actuales que ya no vienen (p. ej. alguien eliminado en el otro
+  /// equipo). Los intentos y el bloqueo NO se tocan: son de la sesión
+  /// de cada equipo.
+  Future<void> aplicarCredencialesSync(
+    Map<String, String> credenciales,
+    List<int> idsActuales,
+  ) async {
+    for (final id in idsActuales) {
+      for (final tipo in const ['clave', 'pin']) {
+        final claveAlmacen = _claveHuella(id, tipo);
+        final valor = credenciales[claveAlmacen];
+        if (valor != null) {
+          await _almacen.guardar(claveAlmacen, valor);
+        } else {
+          await _almacen.eliminar(claveAlmacen);
+        }
+      }
+    }
+  }
 }
 
 // ---------------- Validaciones de formato ----------------

@@ -7,6 +7,8 @@ library;
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/nube/cliente_nube.dart';
+import '../features/nube/servicio_nube.dart';
 import 'base_de_datos/base_de_datos.dart';
 import 'base_de_datos/conexion.dart';
 import 'seguridad/autenticacion.dart';
@@ -112,6 +114,23 @@ final servicioAutenticacionProvider = Provider<ServicioAutenticacion>(
     ref.watch(almacenClavesProvider),
   ),
 );
+
+// ---------------- Nube del hogar (v0.8.0) ----------------
+
+/// El servicio de sincronización con la nube. Alguien tiene que
+/// mirarlo para que exista: el inicio lo mira y así arranca la
+/// sincronización automática.
+final servicioNubeProvider = Provider<ServicioNube>((ref) {
+  final servicio = ServicioNube(
+    ref.watch(baseDeDatosProvider),
+    ref.watch(almacenClavesProvider),
+    ref.watch(servicioAutenticacionProvider),
+    ClienteNubeFirebase(),
+  );
+  ref.onDispose(servicio.detenerAutoSync);
+  servicio.iniciarAutoSync();
+  return servicio;
+});
 
 /// Todas las personas del hogar.
 final usuariosProvider = StreamProvider<List<Usuario>>((ref) {
